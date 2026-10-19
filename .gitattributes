@@ -79,3 +79,6 @@
 *.jpg -diff -merge
 *.jpeg -diff -merge
 *.gif -diff -merge
+
+# SVG diagrams are text and keep LF
+*.svg text eol=lf
