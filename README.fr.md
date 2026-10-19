@@ -158,15 +158,109 @@ La somme des bielles vaut $113.5 + 88.5 + 152 = 354$ mm. Avec les décalages du 
 
 La sélection d’assemblage compare les enveloppes de travail et un indicateur d’effort cinématique sur les 24 configurations. L’étude d’espace de travail couvre les quatre configurations représentatives ci-dessus.
 
-### Analyse statique
+### Analyse par éléments finis v2
 
-L’analyse statique utilise la résine photopolymère 9400A et une charge de 10 N sur chaque face supérieure d’articulation. Les boîtiers d’articulation et l’assemblage complet sont évalués dans SolidWorks Simulation.
+La bielle longue XY v2 est évaluée comme un assemblage statique. La connexion de base est encastrée et la charge de service est appliquée aux nœuds de connexion. Le modèle associe les tôles aluminium 5052 de 5 mm au tube carbone de 50 × 46 mm.
+
+La solution éléments finis s’écrit
+
+$$
+K u = f,
+$$
+
+où $K$ est la matrice de rigidité, $u$ le vecteur des déplacements nodaux et $f$ le vecteur des charges nodales. Le même chemin de charge peut être vérifié par les relations de poutre console :
+
+$$
+M = F L, \qquad \sigma = \frac{M c}{I}, \qquad \delta = \frac{F L^3}{3 E I}.
+$$
+
+L’étude v2 donne une carte du déplacement (URES) dont le maximum vaut
+
+$$
+u_{\max} = 1.388 \times 10^{-2}\ \text{mm}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="Carte de déplacement statique de la bielle longue XY v2" width="480"/>
+  <br>
+  <em><strong>Figure 6 — Analyse par éléments finis v2.</strong> Carte de déplacement statique de la bielle longue XY. La base est encastrée et les nœuds de connexion portent la charge de service ; la légende URES est en millimètres.</em>
+</p>
+
+### Dérivation mathématique v2
+
+Le panneau réduit chaque connexion à une face, un canal et une autre face (FCF). Les nombres de méthodes par module sont :
+
+- Base : 3 méthodes.
+- Bielles longues X-X et X-Y : $2 \times 3 \times 3 = 18$ méthodes.
+- Bielle courte : $2 \times 2 \times 3 = 12$ méthodes.
+- Articulation : côté Pro $4 \times 1 \times 1 = 4$, côté Con $1 \times 4 \times 1 = 4$, soit 8 par module d’articulation.
+- Bielle terminale générale : $2 \times 2$ ou $2 \times 3$ méthodes.
+
+Pour $F$ modules d’articulation, $N_{LL}$ bielles longues et $N_{LS}$ bielles courtes, le total FCF vaut
+
+$$
+N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^F \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_method_counts.png" alt="Nombres de méthodes FCF par module" width="460"/>
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_formula.png" alt="Formule du total des méthodes FCF" width="460"/>
+  <br>
+  <em><strong>Figure 7 — Total des méthodes de connexion FCF.</strong> Nombres par module et formule totale utilisée sur le panneau v2.</em>
+</p>
+
+Pour l’assemblage à trois modules, l’orientation adjacente à la base est fixe et les deux autres modules choisissent l’un de deux canaux perpendiculaires :
+
+$$
+N_3 = 3! \cdot 2^{3-1} = 24.
+$$
+
+La cinématique directe utilise la transformation DH standard :
+
+$$
+T_i^{i-1} =
+\begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix},
+\qquad
+T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3.
+$$
+
+L’espace de travail est l’ensemble des positions de l’outil sur les plages articulaires :
+
+$$
+\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\},
+\qquad
+\mathbf{p}(q) = [T_4^0(q)]_{1:3,4}.
+$$
+
+L’enveloppe échantillonnée atteint environ 450 mm. La sélection d’assemblage utilise l’indice d’effort cinématique du panneau
+
+$$
+E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|,
+$$
+
+avec l’enveloppe de travail. Le flux est illustré ci-dessous.
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-11_effort_index.png" alt="Formule de l’indice d’effort cinématique" width="360"/>
+  <img src="./media/photos/reference/key_figures/fig5-11_optimization_workflow.png" alt="Flux de sélection d’assemblage" width="520"/>
+  <br>
+  <em><strong>Figure 8 — Flux de sélection d’assemblage v2.</strong> Indice d’effort et prétraitement de l’espace de travail.</em>
+</p>
+
+### Analyse statique de la configuration de référence v1
+
+L’analyse statique v1 utilise la résine photopolymère 9400A et une charge de 10 N sur chaque face supérieure d’articulation. Les boîtiers d’articulation et l’assemblage complet sont évalués dans SolidWorks Simulation.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="Maillage éléments finis du boîtier d’articulation" width="380"/>
   <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="Résultat de contrainte statique du boîtier d’articulation" width="380"/>
   <br>
-  <em><strong>Figure 6 — Analyse statique.</strong> Maillage et contrainte du boîtier d’articulation sous une charge de 10 N.</em>
+  <em><strong>Figure 9 — Analyse statique de la référence v1.</strong> Maillage et contrainte du boîtier d’articulation sous une charge de 10 N.</em>
 </p>
 
 ## Structure du dépôt
@@ -256,7 +350,7 @@ Les vues CAO et plateforme v2 présentent la structure et l’ensemble d’entra
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="Bras v2 sur la plateforme de travail 4040" width="820"/>
   <br>
-  <em><strong>Figure 7 — Plateforme de travail v2.</strong> Bras à moteurs pas à pas, bielles aluminium/carbone et cadre 4040.</em>
+  <em><strong>Figure 10 — Plateforme de travail v2.</strong> Bras à moteurs pas à pas, bielles aluminium/carbone et cadre 4040.</em>
 </p>
 
 Les démonstrations de la configuration de référence v1 montrent le bras servo/Pico en mouvement, l’écran OLED/GNSS du contrôleur d’extension, la pince/le module stylo et la vue de simulation.
@@ -276,7 +370,7 @@ Les démonstrations de la configuration de référence v1 montrent le bras servo
   <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Vue d’assemblage des modules" width="420"/>
   <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 combinaisons d’assemblage" width="420"/>
   <br>
-  <em><strong>Figure 8 — Configuration de référence v1 et vues d’assemblage.</strong> Configuration servo/Pico, empilement de modules et les 24 combinaisons permutation/orientation.</em>
+  <em><strong>Figure 11 — Configuration de référence v1 et vues d’assemblage.</strong> Configuration servo/Pico, empilement de modules et les 24 combinaisons permutation/orientation.</em>
 </p>
 
 ## Spécifications

@@ -158,15 +158,109 @@ The link-length sum is $113.5 + 88.5 + 152 = 354$ mm. With the model offsets, th
 
 Assembly selection compares workspace envelopes and a kinematic effort index over the 24 layouts. The workspace study covers the four representative layouts shown above.
 
-### Static analysis
+### v2 finite element analysis
 
-The static study uses 9400A photopolymer resin and a 10 N load on each joint top face. The joint housings and the full assembly are evaluated in SolidWorks Simulation.
+The v2 XY long link is evaluated as a static assembly. The base connection is fixed and the service load is applied at the connection nodes. The model combines the 5 mm 5052 aluminium plates with the 50 × 46 mm carbon tube.
+
+The finite element solution is
+
+$$
+K u = f,
+$$
+
+where $K$ is the stiffness matrix, $u$ the nodal displacement vector and $f$ the nodal load vector. The same load path can be checked with the cantilever relations
+
+$$
+M = F L, \qquad \sigma = \frac{M c}{I}, \qquad \delta = \frac{F L^3}{3 E I}.
+$$
+
+The v2 study reports a displacement-magnitude (URES) contour with a maximum of
+
+$$
+u_{\max} = 1.388 \times 10^{-2}\ \text{mm}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="v2 XY long link static displacement contour" width="480"/>
+  <br>
+  <em><strong>Figure 6 — v2 finite element analysis.</strong> Static displacement contour of the XY long link. The base is fixed and the connection nodes carry the service load; the URES legend is in millimetres.</em>
+</p>
+
+### v2 mathematical derivation
+
+The board reduces each connection to a connecting face, a connecting channel and another connecting face (FCF). The per-module connection counts are:
+
+- Base: 3 methods.
+- X-X and X-Y long link: $2 \times 3 \times 3 = 18$ methods.
+- Short link: $2 \times 2 \times 3 = 12$ methods.
+- Joint: Pro side $4 \times 1 \times 1 = 4$, Con side $1 \times 4 \times 1 = 4$, total 8 per joint module.
+- General end link: $2 \times 2$ or $2 \times 3$ methods.
+
+For $F$ joint modules, $N_{LL}$ long links and $N_{LS}$ short links, the FCF connection-method total is
+
+$$
+N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^F \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_method_counts.png" alt="FCF connection counts per module" width="460"/>
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_formula.png" alt="FCF connection-method total formula" width="460"/>
+  <br>
+  <em><strong>Figure 7 — FCF connection-method count.</strong> Per-module counts and the total formula used on the v2 board.</em>
+</p>
+
+For the three-module assembly, the base-adjacent orientation is fixed and the remaining two modules choose one of two perpendicular channels:
+
+$$
+N_3 = 3! \cdot 2^{3-1} = 24.
+$$
+
+The forward kinematics uses the standard DH transform
+
+$$
+T_i^{i-1} =
+\begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix},
+\qquad
+T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3.
+$$
+
+The workspace is the set of tool positions over the joint ranges:
+
+$$
+\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\},
+\qquad
+\mathbf{p}(q) = [T_4^0(q)]_{1:3,4}.
+$$
+
+The sampled envelope reaches about 450 mm. Assembly selection uses the board's kinematic effort index
+
+$$
+E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|,
+$$
+
+together with the workspace envelope. The workflow is shown below.
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-11_effort_index.png" alt="Kinematic effort index formula" width="360"/>
+  <img src="./media/photos/reference/key_figures/fig5-11_optimization_workflow.png" alt="Assembly selection workflow" width="520"/>
+  <br>
+  <em><strong>Figure 8 — v2 assembly-selection workflow.</strong> The effort index and the workspace pre-processing path.</em>
+</p>
+
+### v1 reference static analysis
+
+The v1 static study uses 9400A photopolymer resin and a 10 N load on each joint top face. The joint housings and the full assembly are evaluated in SolidWorks Simulation.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="Finite element mesh of the joint housing" width="380"/>
   <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="Static stress result for the joint housing" width="380"/>
   <br>
-  <em><strong>Figure 6 — Static analysis.</strong> Mesh and stress result for the joint housing under the 10 N load case.</em>
+  <em><strong>Figure 9 — v1 reference static analysis.</strong> Mesh and stress result for the joint housing under the 10 N load case.</em>
 </p>
 
 ## Repository structure
@@ -256,7 +350,7 @@ The v2 CAD and platform views show the current structure and drive package.
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="v2 arm on the 4040 working platform" width="820"/>
   <br>
-  <em><strong>Figure 7 — v2 working platform.</strong> Stepper-driven arm, aluminium/carbon links and the 4040 frame.</em>
+  <em><strong>Figure 10 — v2 working platform.</strong> Stepper-driven arm, aluminium/carbon links and the 4040 frame.</em>
 </p>
 
 The v1 reference build demonstrations show the servo/Pico reference build in motion, the expand-controller OLED/GNSS display, the gripper/pen module and the simulation view.
@@ -276,7 +370,7 @@ The v1 reference build demonstrations show the servo/Pico reference build in mot
   <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Module assembly view" width="420"/>
   <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 assembly combinations" width="420"/>
   <br>
-  <em><strong>Figure 8 — v1 reference build and assembly views.</strong> The servo/Pico build, a module stack and the 24 permutation/orientation combinations.</em>
+  <em><strong>Figure 11 — v1 reference build and assembly views.</strong> The servo/Pico build, a module stack and the 24 permutation/orientation combinations.</em>
 </p>
 
 ## Design specifications

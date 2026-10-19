@@ -158,15 +158,109 @@ $$
 
 装配选型在 24 种布局上比较工作空间包络与运动学代价指标。工作空间研究覆盖上图四种代表性布局。
 
-### 静态分析
+### v2 有限元分析
 
-静态分析采用 9400A 光敏树脂，在每个关节顶面施加 10 N 载荷。关节外壳与整机装配均在 SolidWorks Simulation 中评估。
+v2 的 XY 长连杆按静力装配进行评估。底座连接固定，工作载荷施加在连接节点上。模型由 5 mm 5052 铝板与 50 × 46 mm 碳纤维管组成。
+
+有限元方程为
+
+$$
+K u = f,
+$$
+
+其中 $K$ 为刚度矩阵，$u$ 为节点位移向量，$f$ 为节点载荷向量。同一载荷路径可用悬臂梁关系校核：
+
+$$
+M = F L, \qquad \sigma = \frac{M c}{I}, \qquad \delta = \frac{F L^3}{3 E I}.
+$$
+
+v2 分析给出位移幅值（URES）云图，最大值为
+
+$$
+u_{\max} = 1.388 \times 10^{-2}\ \text{mm}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="v2 XY 长连杆静态位移云图" width="480"/>
+  <br>
+  <em><strong>图 6 — v2 有限元分析。</strong>XY 长连杆静态位移云图。底座固定，连接节点承受工作载荷；URES 图例单位为毫米。</em>
+</p>
+
+### v2 数理分析推导
+
+展板把每个连接抽象为连接面—连接通道—连接面（FCF）。各模块的连接方法数为：
+
+- 底座：3 种。
+- X-X 与 X-Y 长连杆：$2 \times 3 \times 3 = 18$ 种。
+- 短连杆：$2 \times 2 \times 3 = 12$ 种。
+- 关节：Pro 侧 $4 \times 1 \times 1 = 4$，Con 侧 $1 \times 4 \times 1 = 4$，每个关节模块合计 8 种。
+- 通用末端连杆：$2 \times 2$ 或 $2 \times 3$ 种。
+
+设关节模块数为 $F$、长连杆数为 $N_{LL}$、短连杆数为 $N_{LS}$，FCF 连接方法总数为
+
+$$
+N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^F \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}.
+$$
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_method_counts.png" alt="FCF 各模块连接方法数" width="460"/>
+  <img src="./media/photos/reference/key_figures/fig5-10_fcf_formula.png" alt="FCF 连接方法总数公式" width="460"/>
+  <br>
+  <em><strong>图 7 — FCF 连接方法总数。</strong>各模块连接方法数与 v2 展板使用的总数公式。</em>
+</p>
+
+对三模块装配，底座相邻方向固定，其余两个模块各有两种垂直通道：
+
+$$
+N_3 = 3! \cdot 2^{3-1} = 24.
+$$
+
+正运动学采用标准 DH 变换：
+
+$$
+T_i^{i-1} =
+\begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix},
+\qquad
+T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3.
+$$
+
+工作空间为关节范围内的末端位置集合：
+
+$$
+\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\},
+\qquad
+\mathbf{p}(q) = [T_4^0(q)]_{1:3,4}.
+$$
+
+采样包络最大可达距离约为 450 mm。装配选型使用展板的运动学代价指标
+
+$$
+E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|,
+$$
+
+并结合工作空间包络。流程如下图所示。
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-11_effort_index.png" alt="运动学代价指标公式" width="360"/>
+  <img src="./media/photos/reference/key_figures/fig5-11_optimization_workflow.png" alt="装配选型流程" width="520"/>
+  <br>
+  <em><strong>图 8 — v2 装配选型流程。</strong>代价指标与工作空间预处理路径。</em>
+</p>
+
+### v1 参考静态分析
+
+v1 静态分析采用 9400A 光敏树脂，在每个关节顶面施加 10 N 载荷。关节外壳与整机装配均在 SolidWorks Simulation 中评估。
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="关节外壳有限元网格" width="380"/>
   <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="关节外壳静态应力结果" width="380"/>
   <br>
-  <em><strong>图 6 — 静态分析。</strong>10 N 载荷工况下关节外壳的网格与应力结果。</em>
+  <em><strong>图 9 — v1 参考静态分析。</strong>10 N 载荷工况下关节外壳的网格与应力结果。</em>
 </p>
 
 ## 仓库结构
@@ -256,7 +350,7 @@ v2 的 CAD 与平台视图展示当前结构与驱动组件。
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="v2 机械臂与 4040 工作平台" width="820"/>
   <br>
-  <em><strong>图 7 — v2 工作平台。</strong>步进驱动机械臂、铝/碳连杆与 4040 框架。</em>
+  <em><strong>图 10 — v2 工作平台。</strong>步进驱动机械臂、铝/碳连杆与 4040 框架。</em>
 </p>
 
 v1 参考配置演示展示舵机/Pico 机械臂运动、扩展控制器 OLED/GNSS 显示、夹爪/手写模块与仿真界面。
@@ -276,7 +370,7 @@ v1 参考配置演示展示舵机/Pico 机械臂运动、扩展控制器 OLED/GN
   <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="模块装配视图" width="420"/>
   <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 种装配组合" width="420"/>
   <br>
-  <em><strong>图 8 — v1 参考配置与装配视图。</strong>舵机/Pico 配置、模块堆叠与 24 种排列/方向组合。</em>
+  <em><strong>图 11 — v1 参考配置与装配视图。</strong>舵机/Pico 配置、模块堆叠与 24 种排列/方向组合。</em>
 </p>
 
 ## 设计参数

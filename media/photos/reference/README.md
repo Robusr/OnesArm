@@ -1,7 +1,7 @@
 # Reference figures
 
 - `figures/` — 91 figure exports from the 2024 report set, preserved with their original file names. `figures_manifest.csv` records index, dimensions and a provenance note.
-- `key_figures/` — renamed copies used by the README and long documentation: DH frames, MATLAB model, trajectory, FEA mesh/stress, PCB renders, assembly renders, joint plots, and a 2 × 2 workspace composite.
+- `key_figures/` — renamed copies used by the README and long documentation: DH frames, MATLAB model, trajectory, FEA mesh/stress, PCB renders, assembly renders, joint plots, and a 2 × 2 workspace composite. The v2 board figures include the XY-link displacement contour, FCF method counts and formula, effort index and assembly-selection workflow.
 - `third_party/` — material whose rights remain with the original authors (currently the modular snake-robot figure from reference [9]).
 - `board/` — 2024 poster boards and their illustrations.
 - `defense_slides/` — slide images exported from the 2024 defence deck.
