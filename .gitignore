@@ -2,7 +2,7 @@
 
 # Large local media: kept in the working tree but not committed.
 media/videos/*.mp4
-media/source/posters/*.psd
+media/source/**/*.psd
 media/photos/**/*.psd
 
 # SolidWorks caches and backups
