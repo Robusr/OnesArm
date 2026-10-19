@@ -2,7 +2,7 @@
   <img src="./media/photos/project/banner.jpg" alt="OnesArm v2 模块化机械臂与 4040 铝型材工作平台" width="900"/>
 </p>
 
-<h1 align="center">OnesArm（珠联“臂”合）</h1>
+<h1 align="center">OnesArm</h1>
 
 <p align="center">
   <strong>面向多场景的模块化串联机械臂</strong>
