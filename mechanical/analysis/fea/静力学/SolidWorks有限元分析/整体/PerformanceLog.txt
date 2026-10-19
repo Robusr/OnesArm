@@ -1,0 +1,2 @@
+Number of Contacts: 332
+Number of contact data: 28197
