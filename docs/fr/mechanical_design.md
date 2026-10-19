@@ -26,7 +26,7 @@ L’interface est **semi-rigide** par conception : elle reprend un moment de fle
 | Bielle longue X-X / X-Y | Tôle aluminium 5052 de 5 mm + tube carbone | Découpe/pliage tôle + collage du tube | Nœuds M5 ; 4 + 4 pièces |
 | Bielle courte | Tôle aluminium 5052 de 5 mm | Tôlerie | 4 pièces |
 | Plaque de base | Tôle aluminium 5052 de 5 mm | Tôlerie | 2 pièces |
-| Boîtier d’articulation | Résine 9400A | Impression SLA | \(E=2,75\) GPa, \(\nu=0,44\) |
+| Boîtier d’articulation | Résine 9400A | Impression SLA | $E=2,75$ GPa, $\nu=0,44$ |
 | Supports de capteurs | Résine 9400A | Impression SLA | Gaz, ultrasons, pince |
 | Plateforme | Profilé aluminium 4040 | Découpe et boulonnage | Alimentation 350 W, trois plaques d’essai |
 

@@ -21,6 +21,8 @@ media/
 
 Each GIF has a matching `photos/project/<name>_poster.jpg`. The GIFs are 8 fps, 64-colour palettes, looped, no audio. They are demonstrative recordings, not controlled experiments.
 
+Widths are 360–640 px, below the 800–960 px guideline in the repository prompt: at 800 px the portrait clips and the longer simulation clip would exceed the 8 MB target. All four files are under 8 MB and remain legible at the README size.
+
 ## Original videos
 
 Eleven MP4 files (about 509 MB) are kept in `videos/`. The three largest files (`Video.mp4`, `WeChat_20240419014045.mp4`, `WeChat_20240419013610.mp4`) exceed 100 MB and are deliberately excluded from Git; the working copy is retained locally. The originals also remain in the source archive at `F:\Desktop\OnesArm`.

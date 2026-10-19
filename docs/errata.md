@@ -15,28 +15,28 @@ All lengths below are in metres unless stated otherwise. Angles are in radians u
 ## Conventions
 
 - **Standard DH** used by Peter Corke’s Robotics Toolbox `Link(..., 'standard')`:
-  \[
+  $$
   T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,\operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i)
-  \]
+  $$
 - **Report order** used by equations (3.2)–(3.5):
-  \[
+  $$
   T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Rot}_x(\alpha_i)\,\operatorname{Trans}(a_i,0,0)\,\operatorname{Trans}(0,0,d_i)
-  \]
-  This places the offset \(d_i\) along the \(y\)-axis of the rotated frame, not along \(z\). It is a valid rigid transform but **not** standard DH.
+  $$
+  This places the offset $d_i$ along the $y$-axis of the rotated frame, not along $z$. It is a valid rigid transform but **not** standard DH.
 - The report’s Table 3-20 uses millimetres; the MATLAB scripts convert to metres. The README uses millimetres for readability and states the unit.
 
 ## Errata table
 
 | ID | Location | Original | Type | Status | Correction / evidence |
 |---|---|---|---|---|---|
-| E-01 | Report Eq. (3.6)–(3.9), p. 33 | Transform order `Rot(z,θ) Rot(x,α) Trans(a,0,0) Trans(0,0,d)` | Kinematics / convention | Confirmed | The printed matrices place \(d_1\) and \(d_3\) in the \(x/y\) translation. Standard DH places \(d\) on \(z\). The two conventions give different end-effector positions. See `scripts/verify_theory/report_checks.py`. |
-| E-02 | Report Eq. (3.7), p. 33 | \(T_2^1\) third column printed as `[0, 0, 0]^T` | Kinematics / typo | Confirmed | A rotation block with a zero column has determinant 0, not +1. Under the report’s own order the third column should be `[sin θ₂, -cos θ₂, 0]^T`. The verification test detects the singular matrix. |
+| E-01 | Report Eq. (3.6)–(3.9), p. 33 | Transform order `Rot(z,θ) Rot(x,α) Trans(a,0,0) Trans(0,0,d)` | Kinematics / convention | Confirmed | The printed matrices place $d_1$ and $d_3$ in the $x/y$ translation. Standard DH places $d$ on $z$. The two conventions give different end-effector positions. See `scripts/verify_theory/report_checks.py`. |
+| E-02 | Report Eq. (3.7), p. 33 | $T_2^1$ third column printed as `[0, 0, 0]^T` | Kinematics / typo | Confirmed | A rotation block with a zero column has determinant 0, not +1. Under the report’s own order the third column should be `[sin θ₂, -cos θ₂, 0]^T`. The verification test detects the singular matrix. |
 | E-03 | Table 3-20, p. 32 vs MATLAB | Table: joints 3 and 4 have range `(0°, 180°)`; MATLAB: `(-90°, 90°)` | Kinematics / data consistency | `[待确认]` | The workspace figures cannot be reproduced until the intended range is confirmed. The README lists both. |
-| E-04 | `Simulation_standard.m` line 4 | `L(2)` has `alpha=0` | Kinematics / model error | Confirmed | Table 3-20 and `AyCxBy_D.m` use \(\alpha_2=90°\). The standard model uses 90°. |
+| E-04 | `Simulation_standard.m` line 4 | `L(2)` has `alpha=0` | Kinematics / model error | Confirmed | Table 3-20 and `AyCxBy_D.m` use $\alpha_2=90°$. The standard model uses 90°. |
 | E-05 | `Simulation_standard.m` line 5 | `L(3).qlim = [-90 90]` without `*pi/180` | Units | Confirmed | MATLAB reads the range as 180 rad (about 10 313°), not 180°. The factor is 57.3. |
 | E-06 | `Simulation_standard.m` lines 24–28 | Workspace formula uses `l(1)`, `l(2)` | Code / reproducibility | Confirmed | `l` is undefined in this script; `aaaa.m` defines `l=[0.457,0.325]`, which does not match the 4-DOF DH model. The workspace section fails or is invalid. |
-| E-07 | Report Eq. (3.11), p. 35 | Sum over \(i=1..N_{Var}\) of \(C_{N_{Var}}^i i! 2^{N_{Var}-1}\) | Combinatorics / notation | Confirmed | For \(N_{Var}=3\) the printed sum gives 39, not 24. The report’s Eq. (3.1) and the 24 CAD assemblies use \(N_3 = 3!\,2^{3-1}=24\). The general formula needs a corrected derivation. |
-| E-08 | Report Eq. (3.28), p. 41; board text | “Energy” = integral of \(\lvert\ddot\theta\rvert\); board text uses \(\lvert\dot\theta\rvert\) | Optimisation / definition | Confirmed | Neither integral is electrical or mechanical energy: no torque, inertia or efficiency enters. It is a **kinematic effort proxy**. The velocity/acceleration versions also disagree. Call it a proxy, not energy. |
+| E-07 | Report Eq. (3.11), p. 35 | Sum over $i=1..N_{Var}$ of $C_{N_{Var}}^i i! 2^{N_{Var}-1}$ | Combinatorics / notation | Confirmed | For $N_{Var}=3$ the printed sum gives 39, not 24. The report’s Eq. (3.1) and the 24 CAD assemblies use $N_3 = 3!\,2^{3-1}=24$. The general formula needs a corrected derivation. |
+| E-08 | Report Eq. (3.28), p. 41; board text | “Energy” = integral of $\lvert\ddot\theta\rvert$; board text uses $\lvert\dot\theta\rvert$ | Optimisation / definition | Confirmed | Neither integral is electrical or mechanical energy: no torque, inertia or efficiency enters. It is a **kinematic effort proxy**. The velocity/acceleration versions also disagree. Call it a proxy, not energy. |
 | E-09 | Report §3.1.2–3.1.3, p. 21–28 | 10 N applied to each joint top face; conclusion “can work normally” | Statics / load case | `[待确认]` | 10 N at the 0.354 m link-length reach is 3.54 N·m; at the model’s 0.450 m maximum reach it is 4.50 N·m. One 15 kgf·cm servo stalls at 1.47 N·m (ratios 2.41 and 3.06). The load is applied at joint faces, not necessarily the tip, but the report does not give the load location or a safety factor. |
 | E-10 | Report Ch. 2 vs Ch. 5; CAD drive folder | v1: 15 kgf·cm servo + Pico W; v2: 42BYGH47 + FLE-42-20 + STM32 CAN; CAD name `FLE-42-20_42BYGH27` | Configuration control | `[待确认]` | At least two revisions are mixed. The CAD model number 42BYGH27 disagrees with the text 42BYGH47. Freeze one revision before building. |
 | E-11 | `firmware/`, report §4.2.3/4.3.1 | Report claims MicroPython open-loop control and kinematics migration | Firmware / evidence | Confirmed gap | The STM32 projects are CubeMX skeletons; CAN is disabled; `keyled.c` has compile errors (`unit32_t`, `uiny32_t`, `HAL_ReadPin`, `tineout`) and `keyled.h` is empty; MicroPython contains only SSD1306 and GNSS libraries. No arm-control `main.py` is present. |

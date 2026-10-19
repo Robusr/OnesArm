@@ -30,9 +30,9 @@
 
 **OnesArm** (Chinese project title: 珠联“臂”合) is a modular serial robotic arm built from interchangeable joint, link and end-effector modules. Instead of one fixed kinematic chain, the arm is assembled from standardised **T/N mortise-and-tenon** interfaces. For the three-module prototype, the base-adjacent orientation is fixed and the other two modules each choose one of two perpendicular channels, giving
 
-\[
+$$
 N_3 = 3! \cdot 2^{3-1} = 24
-\]
+$$
 
 joint layouts. The 24 assemblies are present as SolidWorks models.
 
@@ -94,13 +94,13 @@ The project was developed by 郭沫晗 (Guo Mohan) at Guyuan No. 1 Middle School
 
 ### Modular combinations
 
-The report abstracts the chain as **Connecting Face – Connecting Channel – Connecting Face** (FCF). An X-X or X-Y long link has 6 faces × 4 channels; a short link has 4 × 4; a joint has 2 × 4. For the three-module prototype, the 45° module and two 90° modules can be ordered in \(3!\) ways; the base-adjacent orientation is fixed, and the other two orientations give \(2^2\). The result is 24, verified by 24 CAD assemblies plus 3 single-joint models.
+The report abstracts the chain as **Connecting Face – Connecting Channel – Connecting Face** (FCF). An X-X or X-Y long link has 6 faces × 4 channels; a short link has 4 × 4; a joint has 2 × 4. For the three-module prototype, the 45° module and two 90° modules can be ordered in $3!$ ways; the base-adjacent orientation is fixed, and the other two orientations give $2^2$. The result is 24, verified by 24 CAD assemblies plus 3 single-joint models.
 
 ### Kinematics
 
 The analysed configuration is **AyCxBy-D**, a 4-DOF chain. Report Table 3-20 gives:
 
-| \(i\) | \(d_i\) (mm) | \(a_i\) (mm) | \(\alpha_i\) | Report range |
+| $i$ | $d_i$ (mm) | $a_i$ (mm) | $\alpha_i$ | Report range |
 |---:|---:|---:|---:|---|
 | 1 | 95 | 0 | 90° | 0° |
 | 2 | 0 | 113.5 | 90° | 0–180° |
@@ -109,12 +109,12 @@ The analysed configuration is **AyCxBy-D**, a 4-DOF chain. Report Table 3-20 giv
 
 Standard DH is
 
-\[
+$$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
 \operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
-\]
+$$
 
-The report prints a different order, \(\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)\), and Eq. (3.7) has a zero third column. The two conventions give different tool positions. The repository uses standard DH for the verification and records the mismatch in [`docs/errata.md`](docs/errata.md).
+The report prints a different order, $\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)$, and Eq. (3.7) has a zero third column. The two conventions give different tool positions. The repository uses standard DH for the verification and records the mismatch in [`docs/errata.md`](docs/errata.md).
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Four assembly workspaces" width="760"/>
@@ -214,13 +214,13 @@ The GIFs below are **bench demonstrations**, not controlled experiments. They sh
 | Parameter | Value | Source |
 |---|---|---|
 | Analysed configuration | AyCxBy-D, 4 DOF | Report §3.3 |
-| Link lengths \(d_1, a_2, d_3, a_3, a_4\) | 95, 113.5, 21.34, 88.5, 152 mm | Report Table 3-20 |
+| Link lengths $d_1, a_2, d_3, a_3, a_4$ | 95, 113.5, 21.34, 88.5, 152 mm | Report Table 3-20 |
 | Link-length sum | 354 mm | Computed |
 | Maximum model reach | about 450 mm | Computed, 10,000 samples |
 | Report joint limits | q1 0°, q2–q4 0–180° | Report Table 3-20 |
 | MATLAB joint limits | q1 0°, q2 0–180°, q3/q4 ±90° | `software/matlab/kinematics` (conflict) |
-| Assemblies | 24 combinations | \(3!\,2^{2}\); 24 CAD files |
-| FEA material | 9400A resin, \(E=2.75\) GPa, \(\nu=0.44\), 1150 kg/m³ | Report Table 3-1 |
+| Assemblies | 24 combinations | $3!\,2^{2}$; 24 CAD files |
+| FEA material | 9400A resin, $E=2.75$ GPa, $\nu=0.44$, 1150 kg/m³ | Report Table 3-1 |
 | FEA load | 10 N at each joint top face | Report §3.1.2 |
 | v1 servo | 15 kgf·cm (1.47 N·m) stall, 0.16 s/60° at 6 V | Report §2.3.1 |
 | v2 drive | 42BYGH47 + FLE-42-20, 1:20 | Report §5.2.2 |

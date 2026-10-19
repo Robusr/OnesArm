@@ -30,9 +30,9 @@
 
 **OnesArm** (titre chinois : 珠联“臂”合) est un bras robotique série modulaire composé de modules d’articulation, de bielle et d’effecteur interchangeables. Au lieu d’une chaîne cinématique figée, le bras s’assemble par des interfaces normalisées **T/N à tenon et mortaise**. Pour le prototype à trois modules, l’orientation du module adjacent à la base est fixe et les deux autres modules choisissent chacun l’un de deux canaux perpendiculaires, ce qui donne
 
-\[
+$$
 N_3 = 3! \cdot 2^{3-1} = 24
-\]
+$$
 
 configurations articulaires. Les 24 assemblages existent en modèles SolidWorks.
 
@@ -94,13 +94,13 @@ Le projet a été développé par 郭沫晗 (Guo Mohan) au lycée n° 1 de Guyua
 
 ### Combinaisons modulaires
 
-Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion – Face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux ; une bielle courte 4 × 4 ; une articulation 2 × 4. Pour le prototype à trois modules, le module 45° et les deux modules 90° peuvent être ordonnés de \(3!\) façons ; l’orientation adjacente à la base est fixe et les deux autres donnent \(2^2\). Le résultat est 24, vérifié par 24 assemblages CAO et 3 modèles d’articulation seule.
+Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion – Face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux ; une bielle courte 4 × 4 ; une articulation 2 × 4. Pour le prototype à trois modules, le module 45° et les deux modules 90° peuvent être ordonnés de $3!$ façons ; l’orientation adjacente à la base est fixe et les deux autres donnent $2^2$. Le résultat est 24, vérifié par 24 assemblages CAO et 3 modèles d’articulation seule.
 
 ### Cinématique
 
 La configuration analysée est **AyCxBy-D**, une chaîne à 4 DDL. La table 3-20 du rapport donne :
 
-| \(i\) | \(d_i\) (mm) | \(a_i\) (mm) | \(\alpha_i\) | Plage du rapport |
+| $i$ | $d_i$ (mm) | $a_i$ (mm) | $\alpha_i$ | Plage du rapport |
 |---:|---:|---:|---:|---|
 | 1 | 95 | 0 | 90° | 0° |
 | 2 | 0 | 113.5 | 90° | 0–180° |
@@ -109,12 +109,12 @@ La configuration analysée est **AyCxBy-D**, une chaîne à 4 DDL. La table 3-20
 
 La DH standard s’écrit
 
-\[
+$$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
 \operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
-\]
+$$
 
-Le rapport imprime un autre ordre, \(\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)\), et l’équation (3.7) a une troisième colonne nulle. Les deux conventions donnent des positions différentes. Le dépôt utilise la DH standard pour la vérification et consigne l’écart dans [`docs/errata.md`](docs/errata.md).
+Le rapport imprime un autre ordre, $\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)$, et l’équation (3.7) a une troisième colonne nulle. Les deux conventions donnent des positions différentes. Le dépôt utilise la DH standard pour la vérification et consigne l’écart dans [`docs/errata.md`](docs/errata.md).
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Espaces de travail de quatre assemblages" width="760"/>
@@ -214,13 +214,13 @@ Les GIF ci-dessous sont des **démonstrations au banc**, pas des expériences co
 | Paramètre | Valeur | Source |
 |---|---|---|
 | Configuration analysée | AyCxBy-D, 4 DDL | Rapport §3.3 |
-| Longueurs \(d_1, a_2, d_3, a_3, a_4\) | 95 ; 113,5 ; 21,34 ; 88,5 ; 152 mm | Rapport table 3-20 |
+| Longueurs $d_1, a_2, d_3, a_3, a_4$ | 95 ; 113,5 ; 21,34 ; 88,5 ; 152 mm | Rapport table 3-20 |
 | Somme des bielles | 354 mm | Calcul |
 | Portée maximale du modèle | environ 450 mm | Calcul, 10 000 échantillons |
 | Limites du rapport | q1 0°, q2–q4 0–180° | Rapport table 3-20 |
 | Limites MATLAB | q1 0°, q2 0–180°, q3/q4 ±90° | `software/matlab/kinematics` (conflit) |
-| Assemblages | 24 combinaisons | \(3!\,2^{2}\) ; 24 fichiers CAO |
-| Matériau EF | résine 9400A, \(E=2,75\) GPa, \(\nu=0,44\), 1150 kg/m³ | Rapport table 3-1 |
+| Assemblages | 24 combinaisons | $3!\,2^{2}$ ; 24 fichiers CAO |
+| Matériau EF | résine 9400A, $E=2,75$ GPa, $\nu=0,44$, 1150 kg/m³ | Rapport table 3-1 |
 | Charge EF | 10 N sur chaque face supérieure d’articulation | Rapport §3.1.2 |
 | Servomoteur v1 | 15 kgf·cm (1,47 N·m) au décrochage, 0,16 s/60° à 6 V | Rapport §2.3.1 |
 | Entraînement v2 | 42BYGH47 + FLE-42-20, 1:20 | Rapport §5.2.2 |

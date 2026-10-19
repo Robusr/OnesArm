@@ -25,11 +25,11 @@ An X-X or X-Y long link is abstracted as 6 connection faces with 4 channels each
 
 ## 3. Combination count
 
-For the three-module prototype (one 45° module and two 90° modules), the base-adjacent orientation is fixed. The remaining two orientations contribute \(2^2\), and the three modules can be permuted in \(3!\) orders:
+For the three-module prototype (one 45° module and two 90° modules), the base-adjacent orientation is fixed. The remaining two orientations contribute $2^2$, and the three modules can be permuted in $3!$ orders:
 
-\[
+$$
 N_3 = 3! \cdot 2^{3-1} = 6 \cdot 4 = 24.
-\]
+$$
 
 The CAD archive contains exactly 24 three-letter combination assemblies plus 3 single-joint models. The report’s general formula (3.11) does not reproduce 24 when evaluated naively; the derivation is recorded in [errata E-07](../errata.md).
 
@@ -37,36 +37,36 @@ The CAD archive contains exactly 24 three-letter combination assemblies plus 3 s
 
 The analysed configuration is **AyCxBy-D**, a 4-DOF chain ending in the parallel gripper. The link frames follow the report’s SDH table:
 
-| \(i\) | \(\theta_i\) | \(d_i\) (mm) | \(a_i\) (mm) | \(\alpha_i\) | Report range |
+| $i$ | $\theta_i$ | $d_i$ (mm) | $a_i$ (mm) | $\alpha_i$ | Report range |
 |---:|---|---:|---:|---:|---|
-| 1 | \(\theta_1\) | 95 | 0 | 90° | 0° |
-| 2 | \(\theta_2\) | 0 | 113.5 | 90° | 0–180° |
-| 3 | \(\theta_3\) | 21.34 | 88.5 | 90° | 0–180° |
-| 4 | \(\theta_4\) | 0 | 152 | 0° | 0–180° |
+| 1 | $\theta_1$ | 95 | 0 | 90° | 0° |
+| 2 | $\theta_2$ | 0 | 113.5 | 90° | 0–180° |
+| 3 | $\theta_3$ | 21.34 | 88.5 | 90° | 0–180° |
+| 4 | $\theta_4$ | 0 | 152 | 0° | 0–180° |
 
 ![Link frames](../../media/photos/reference/key_figures/fig3-21_link_frames.png)
 
-The sum of the three link lengths is \(113.5 + 88.5 + 152 = 354\) mm. The full model’s maximum reach is about **450 mm** because the offsets \(d_1\) and \(d_3\) also contribute.
+The sum of the three link lengths is $113.5 + 88.5 + 152 = 354$ mm. The full model’s maximum reach is about **450 mm** because the offsets $d_1$ and $d_3$ also contribute.
 
 ## 5. Transform conventions
 
 The report writes each link transform as
 
-\[
+$$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Rot}_x(\alpha_i)\,
 \operatorname{Trans}(a_i,0,0)\,\operatorname{Trans}(0,0,d_i),
-\]
+$$
 
-which places \(d_i\) in the \(x/y\) translation. Standard DH — the convention used by the MATLAB Robotics Toolbox — is
+which places $d_i$ in the $x/y$ translation. Standard DH — the convention used by the MATLAB Robotics Toolbox — is
 
-\[
+$$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
 \operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i),
-\]
+$$
 
-which places \(d_i\) on the \(z\)-axis. The two are not equivalent. For example, at \(q=[0,90°,0,0]\) the standard model puts the tool at \((0.021,0,0.449)\) m, while the report-order model gives \((0, -0.074, 0.354)\) m.
+which places $d_i$ on the $z$-axis. The two are not equivalent. For example, at $q=[0,90°,0,0]$ the standard model puts the tool at $(0.021,0,0.449)$ m, while the report-order model gives $(0, -0.074, 0.354)$ m.
 
-Equation (3.7) in the report also prints the third column of \(T_2^1\) as zeros; that block has determinant 0 and cannot be a rotation. Under the report’s own convention the column should be \([\sin\theta_2, -\cos\theta_2, 0]^T\). The full derivation and the numerical check are in [errata E-01/E-02](../errata.md) and [verification](../verification.md).
+Equation (3.7) in the report also prints the third column of $T_2^1$ as zeros; that block has determinant 0 and cannot be a rotation. Under the report’s own convention the column should be $[\sin\theta_2, -\cos\theta_2, 0]^T$. The full derivation and the numerical check are in [errata E-01/E-02](../errata.md) and [verification](../verification.md).
 
 ![MATLAB model](../../media/photos/reference/key_figures/fig3-22_matlab_model.png)
 
@@ -74,11 +74,11 @@ Equation (3.7) in the report also prints the third column of \(T_2^1\) as zeros;
 
 The forward map is
 
-\[
+$$
 T_4^0(q) = T_1^0(\theta_1)T_2^1(\theta_2)T_3^2(\theta_3)T_4^3(\theta_4).
-\]
+$$
 
-With the MATLAB joint limits \((0°,0°)\), \((0°,180°)\), \((-90°,90°)\), \((-90°,90°)\), 10,000 uniformly sampled joint vectors give the following bounding box (standard DH, computed in `scripts/verify_theory/`):
+With the MATLAB joint limits $(0°,0°)$, $(0°,180°)$, $(-90°,90°)$, $(-90°,90°)$, 10,000 uniformly sampled joint vectors give the following bounding box (standard DH, computed in `scripts/verify_theory/`):
 
 | Axis | Range |
 |---|---:|
@@ -89,7 +89,7 @@ With the MATLAB joint limits \((0°,0°)\), \((0°,180°)\), \((-90°,90°)\), \
 
 ![Workspace montage](../../media/photos/reference/key_figures/fig3-29_workspaces.png)
 
-The report’s Table 3-20 instead gives \((0°,180°)\) for joints 3 and 4. The MATLAB scripts use \((-90°,90°)\). This conflict changes the envelope and is marked `[待确认]` in the errata. The random-sample box is not a measured workspace or a complete boundary.
+The report’s Table 3-20 instead gives $(0°,180°)$ for joints 3 and 4. The MATLAB scripts use $(-90°,90°)$. This conflict changes the envelope and is marked `[待确认]` in the errata. The random-sample box is not a measured workspace or a complete boundary.
 
 ## 7. Trajectory planning
 
@@ -101,11 +101,11 @@ The MATLAB scripts use `jtraj`, a quintic polynomial in joint space, and `ctraj`
 
 The report proposes
 
-\[
+$$
 E_{sum} = \sum_{i=1}^{N_{Var}} \int_0^t \left|\ddot{\theta}_i(\tau)\right| d\tau
-\]
+$$
 
-as an “energy” index. The board text uses the first derivative, \(\left|\dot{\theta}_i\right|\). Neither integral contains torque, inertia or efficiency, so neither is an energy. It is a **kinematic effort proxy**. The archive contains no loop over the 24 assemblies and no implementation of this cost; `Optimization.m` is a MediaPipe pose viewer. The repository therefore labels the method as proposed, not demonstrated. See [errata E-08](../errata.md).
+as an “energy” index. The board text uses the first derivative, $\left|\dot{\theta}_i\right|$. Neither integral contains torque, inertia or efficiency, so neither is an energy. It is a **kinematic effort proxy**. The archive contains no loop over the 24 assemblies and no implementation of this cost; `Optimization.m` is a MediaPipe pose viewer. The repository therefore labels the method as proposed, not demonstrated. See [errata E-08](../errata.md).
 
 The workspace part compares four assembly modes (AyCxBy-D, AyCyBx-D, AyCxBx-D, AyCyBy-D) and selects the one that best fits a task. The report shows the point clouds but does not give a scalar selection criterion or a measured task trial.
 

@@ -30,17 +30,17 @@ The two transform conventions give different positions for the same joint vector
 | q = [0, 90, 0, 0] deg | (0.02134, 0.000, 0.44900) | (0.000, -0.07366, 0.35400) |
 | q = [0, 45, -30, 30] deg | (0.283892, 0.110068, 0.241232) | (0.261257, 0.033549, 0.153777) |
 
-The difference is not rounding: the report places \(d_1\) and \(d_3\) after the \(x\)-rotation, so the offset appears in the \(x/y\) translation. Standard DH keeps \(d\) on the \(z\)-axis. See `errata.md` E-01.
+The difference is not rounding: the report places $d_1$ and $d_3$ after the $x$-rotation, so the offset appears in the $x/y$ translation. Standard DH keeps $d$ on the $z$-axis. See `errata.md` E-01.
 
 ## Report equation (3.7)
 
-The printed \(T_2^1\) rotation block has a zero third column. Its determinant at \(\theta_2=90°\) is:
+The printed $T_2^1$ rotation block has a zero third column. Its determinant at $\theta_2=90°$ is:
 
 ```text
 det(R) = 0.000000
 ```
 
-A rigid rotation requires \(\det(R)=+1\). Under the report’s own transform order the third column should be \([\sin\theta_2, -\cos\theta_2, 0]^T\). The verification test records this as a known defect (E-02).
+A rigid rotation requires $\det(R)=+1$. Under the report’s own transform order the third column should be $[\sin\theta_2, -\cos\theta_2, 0]^T$. The verification test records this as a known defect (E-02).
 
 ## Workspace sampling
 
@@ -61,7 +61,7 @@ This is a **model-derived random-sample envelope**, not a measured workspace and
 
 ## Actuator load case
 
-- Link-length sum \(a_2+a_3+a_4 = 0.354\) m.
+- Link-length sum $a_2+a_3+a_4 = 0.354$ m.
 - 10 N at 0.354 m: **3.540 N·m**.
 - 10 N at the model’s 0.4496 m maximum reach: **4.496 N·m**.
 - One 15 kgf·cm servo stall torque: **1.471 N·m**.
@@ -71,16 +71,16 @@ Both exceed a single servo’s stall torque. The FEA applies 10 N at each joint 
 
 ## Joint-limit units
 
-`Simulation_standard.m` line 5 uses `qlim=[-90 90]` without `*pi/180`. MATLAB reads this as 180 rad (about 10,313°), a factor of **57.3** too large. The correct range is \(\pi\) rad. See E-05.
+`Simulation_standard.m` line 5 uses `qlim=[-90 90]` without `*pi/180`. MATLAB reads this as 180 rad (about 10,313°), a factor of **57.3** too large. The correct range is $\pi$ rad. See E-05.
 
 ## Assembly count
 
 - Combinatorial count for three interchangeable modules with the base-adjacent orientation fixed:
-  \[
+  $$
   N_3 = 3! \cdot 2^{3-1} = 24.
-  \]
+  $$
 - CAD inventory: **27 SLDASM** in `mechanical/source/assemblies/simplified_24`, of which **24** are three-letter combinations and **3** are single-joint models.
-- The printed general formula (3.11) does not reproduce 24 for \(N=3\); see E-07.
+- The printed general formula (3.11) does not reproduce 24 for $N=3$; see E-07.
 
 ## What was not verified
 

@@ -26,7 +26,7 @@ The interface is **semi-rigid** by design: it can carry a bending moment and sti
 | X-X / X-Y long link | 5 mm 5052 aluminium sheet + carbon-fibre tube | Sheet-metal laser cut/bend + tube bonding | M5 nodes; 4 + 4 pieces in the build list |
 | Short link | 5 mm 5052 aluminium sheet | Sheet metal | 4 pieces |
 | Base plate | 5 mm 5052 aluminium sheet | Sheet metal | 2 pieces |
-| Joint housing | 9400A photopolymer resin | SLA 3D print | \(E=2.75\) GPa, \(\nu=0.44\) |
+| Joint housing | 9400A photopolymer resin | SLA 3D print | $E=2.75$ GPa, $\nu=0.44$ |
 | Sensor brackets | 9400A resin | SLA 3D print | Gas sensor, ultrasonic, gripper |
 | Platform | 4040 European aluminium profile | Cut and bolt | 350 W supply, three test plates |
 
