@@ -1,21 +1,22 @@
 <p align="center">
-  <img src="./media/photos/project/banner.jpg" alt="OnesArm 模块化串联机械臂渲染图" width="900"/>
+  <img src="./media/photos/project/banner.jpg" alt="OnesArm v2 模块化机械臂与 4040 铝型材工作平台" width="900"/>
 </p>
 
 <h1 align="center">OnesArm（珠联“臂”合）</h1>
 
 <p align="center">
-  <strong>面向多场景的可重构模块化串联机械臂</strong>
+  <strong>面向多场景的模块化串联机械臂</strong>
   <br>
-  24 种关节布局、榫卯式接口、两代有文档的硬件方案
+  v2 步进+CAN 平台，24 种关节布局，榫卯式接口
 </p>
 
 <p align="center">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/code-MIT-blue.svg" alt="代码：MIT"></a>
   <a href="./LICENSE-docs.md"><img src="https://img.shields.io/badge/docs%20%26%20CAD-CC%20BY%204.0-lightgrey.svg" alt="文档与 CAD：CC BY 4.0"></a>
   <img src="https://img.shields.io/badge/CAD-SolidWorks-e63946" alt="SolidWorks">
-  <img src="https://img.shields.io/badge/control-STM32%20%7C%20RP2040-00549f" alt="STM32 与 RP2040">
-  <img src="https://img.shields.io/badge/status-research%20prototype-orange" alt="研究样机">
+  <img src="https://img.shields.io/badge/control-STM32%20CAN-00549f" alt="STM32 CAN">
+  <img src="https://img.shields.io/badge/platform-350%20W-2e7d32" alt="350 W 平台">
+  <img src="https://img.shields.io/badge/status-v2%20current-brightgreen" alt="v2 当前版本">
 </p>
 
 <p align="center">
@@ -28,7 +29,9 @@
 
 ## 关于项目
 
-**OnesArm**（项目名“珠联‘臂’合”）是一台由可互换的关节、连杆与末端执行器模块组成的模块化串联机械臂。它没有固定的一条运动链，而是通过标准化的 **T/N 榫卯接口** 组装。对三模块样机，与底座相邻的模块方向固定，其余两个模块各有两种互相垂直的连接通道，因此得到
+**OnesArm**（项目名“珠联‘臂’合”）是一台模块化串联机械臂。**v2 是当前平台。** 它采用 42BYGH47 步进电机、FLE-42-20 行星减速器、STM32F103C8T6 CAN 关节模块、STM32F407ZGT6 总线控制器、350 W 电源和 4040 铝型材工作平台。连杆采用 5 mm 厚 5052 铝板与 50 × 46 mm 碳纤维管，通过标准化 M5 节点连接。
+
+机械臂由可互换的关节、连杆与末端执行器模块组成，接口为 **T/N 榫卯**。三模块配置中，与底座相邻的方向固定，其余两个模块各有两种垂直通道，得到
 
 $$
 N_3 = 3! \cdot 2^{3-1} = 24
@@ -36,20 +39,22 @@ $$
 
 种关节布局。24 种装配均已建成 SolidWorks 模型。
 
-项目由宁夏固原市第一中学郭沫晗完成。报告记载获得第 38 届全国青少年科技创新大赛一等奖（2024）。仓库把**有文档的**、**可复算的**与**尚未实测的**内容分开标注。
+较早的 **v1 参考配置** 使用 15 kgf·cm PWM 舵机与 Raspberry Pi Pico W，仓库中完整保留用于对照。项目由宁夏固原市第一中学郭沫晗完成。报告记载获得第 38 届全国青少年科技创新大赛一等奖（2024）。
 
-> **仓库记录了两代硬件。** v1 使用 15 kgf·cm PWM 舵机与 Raspberry Pi Pico W；v2 使用 42BYGH47 步进电机、FLE-42-20 减速器与 STM32 CAN 平台。两者引脚不兼容。下单前请先读 [`docs/errata.md`](docs/errata.md)。
+> **平台说明。** v1 与 v2 使用各自独立的电子系统。装配前请选择对应的驱动与板卡。
 
 ## 关键特性
 
-- **24 种可重构关节布局** — 三个可互换模块，每个模块两个垂直通道，底座相邻方向固定。
-- **榫卯式 T/N 接口** — 顶部 T 节点、底部 N 节点，M5 螺丝夹紧；灵感来自燕尾榫与十字刻半榫。
-- **两代有文档的驱动方案** — 低成本舵机/Pico W 样机，以及带 350 W 电源的步进/CAN 平台。
+- **v2 步进/CAN 驱动链** — 42BYGH47 电机、FLE-42-20 1:20 减速器、磁编码器闭环控制与 STM32F103C8T6 CAN 关节模块。
+- **v2 铝/碳结构** — 5 mm 5052 连杆、50 × 46 mm 碳管、M5 节点、4040 平台与 350 W 电源，并提供 SolidWorks、STEP 与 STL 源文件。
+- **24 种可重构布局** — 三个可互换模块、两个垂直通道，底座相邻方向固定。
+- **T/N 榫卯接口** — 顶部 T 节点、底部 N 节点，M5 螺丝夹紧，灵感来自燕尾榫与十字刻半榫。
+- **v1 参考配置** — 15 kgf·cm PWM 舵机、Raspberry Pi Pico W、五块模块板与 16P 金手指互连。
 - **多场景末端执行器** — 平行夹爪、HC-SR04 超声波、MQ 气体传感器与手写笔模块共用接口。
-- **开放的制造包** — SolidWorks 源文件、STEP/STL、Gerber、BOM 与制造清单。
-- **可复现的审查** — 针对 DH 变换、关节范围、工作空间与载荷工况的勘误和纯 Python 复算。
 
 ## 系统架构
+
+### v2 当前平台
 
 ```text
                     ┌──────────────────────────────┐
@@ -59,42 +64,71 @@ $$
                                    │ T/N 接口
                     ┌──────────────┴───────────────┐
                     │  连杆模块（XX / XY / 短连杆）  │
+                    │  5 mm 5052 + 碳纤维管          │
                     └──────────────┬───────────────┘
                                    │
                     ┌──────────────┴───────────────┐
                     │  关节模块（45° / 90°）         │
-                    │  驱动 + 轴承 + PCB             │
+                    │  42BYGH47 + FLE-42-20 + CAN   │
                     └──────────────┬───────────────┘
                                    │
                     ┌──────────────┴───────────────┐
-                    │  底座 + 工作平台 + 电源         │
+                    │  4040 平台 + 350 W 电源        │
+                    │  STM32F407ZGT6 CAN 控制器      │
                     └──────────────────────────────┘
 ```
 
-| 版本 | 控制器 | 驱动 | 模块总线 | 供电 |
-|---|---|---|---|---|
-| **v1** | Raspberry Pi Pico W（RP2040，Wi-Fi） | 15 kgf·cm PWM 舵机 | 16P 2.54 mm 金手指 | 5–9 V 舵机电源 |
-| **v2** | STM32F103C8T6 CAN 模块 + STM32F407ZGT6 控制器 | 42BYGH47 + FLE-42-20（1:20） | CAN（TJA1050） | 350 W 直流，XT60 |
+| 子系统 | v2 实现 |
+|---|---|
+| 控制器 | STM32F407ZGT6 CAN 总线控制器；每个关节配 STM32F103C8T6 CAN 模块 |
+| 驱动 | 42BYGH47 步进 + FLE-42-20 行星减速器，1:20；磁编码器闭环 |
+| 总线与供电 | TJA1050 CAN；350 W 直流电源；XT60 输入；LM2596-5.0 逻辑电源 |
+| 结构 | 5 mm 5052 铝板 + 50 × 46 mm 碳管；M5 节点；4040 铝型材平台 |
+| 末端执行器 | 平行夹爪、HC-SR04 超声波、MQ 气体传感器、手写笔模块 |
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="连接面—连接通道—连接面" width="520"/>
-  <img src="./media/photos/reference/key_figures/fig5-8_concat_structure.png" alt="模块串联结构" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig5-1_xx_link_render.jpg" alt="v2 X-X 长连杆渲染" width="340"/>
+  <img src="./media/photos/reference/key_figures/fig5-2_xy_link_render.jpg" alt="v2 X-Y 长连杆渲染" width="340"/>
   <br>
-  <em><strong>图 1 — FCF 抽象。</strong>每个连接由连接面、连接通道与另一个连接面组成。长连杆有 6 个面，短连杆 4 个，关节 2 个。</em>
+  <em><strong>图 1 — v2 长连杆。</strong>X-X 与 X-Y 连杆采用 5 mm 5052 铝板、50 × 46 mm 碳管与 M5 连接节点。</em>
 </p>
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-4_drive_module_render.jpg" alt="驱动模块渲染" width="420"/>
-  <img src="./media/photos/project/onesarm_prototype_small.jpg" alt="OnesArm 样机" width="260"/>
+  <img src="./media/photos/reference/key_figures/fig5-4_drive_module_render.jpg" alt="v2 步进与减速器模块" width="380"/>
+  <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="v2 机械臂与 4040 工作平台" width="520"/>
   <br>
-  <em><strong>图 2 — 驱动模块与样机。</strong>2024 样机使用打印关节外壳、钣金连杆与四吸盘底座；v2 渲染展示步进/减速器组件。</em>
+  <em><strong>图 2 — v2 驱动模块与平台。</strong>42BYGH47 步进电机、FLE-42-20 减速器、CAN 板与 4040 铝型材工作平台。</em>
+</p>
+
+### v1 参考配置
+
+| 子系统 | v1 实现 |
+|---|---|
+| 控制器 | Raspberry Pi Pico W，RP2040，Wi-Fi |
+| 驱动 | 15 kgf·cm PWM 数字舵机 |
+| 总线 | 16P 2.54 mm 金手指互连 |
+| 板卡 | Base、Joint A、Joint B、Holder/Sensor、Expand Controller |
+| 供电 | 5–9 V 舵机电源；5 V 逻辑电源 |
+
+<p align="center">
+  <img src="./media/photos/project/banner_v1.jpg" alt="v1 参考配置渲染" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig2-19_pcb_joint_module.png" alt="v1 关节模块 PCB" width="360"/>
+  <br>
+  <em><strong>图 3 — v1 参考配置。</strong>舵机驱动机械臂渲染与 Joint Module PCB，包含 PWM 输出、状态 LED 与舵机信号选择。</em>
 </p>
 
 ## 理论与设计
 
 ### 模块化组合
 
-报告把串联链抽象为**连接面—连接通道—连接面**（FCF）。X-X 或 X-Y 长连杆为 6 个面 × 4 个通道；短连杆为 4 × 4；关节为 2 × 4。对三模块样机，1 个 45° 模块与 2 个 90° 模块可排列为 $3!$ 种；底座相邻方向固定，其余两个方向各有 2 种选择。结果为 24，并由 24 个 CAD 组合装配体与 3 个单关节模型核实。
+报告把串联链抽象为**连接面—连接通道—连接面**（FCF）。X-X 或 X-Y 长连杆为 6 个面 × 4 个通道；短连杆为 4 × 4；关节为 2 × 4。对三模块配置，1 个 45° 模块与 2 个 90° 模块可排列为 $3!$ 种；底座相邻方向固定，其余两个方向各有 2 种选择。结果为 24，并由 24 个 CAD 组合装配体与 3 个单关节模型核实。
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="连接面—连接通道—连接面" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig5-8_concat_structure.png" alt="模块串联结构" width="520"/>
+  <br>
+  <em><strong>图 4 — FCF 抽象。</strong>每个连接由连接面、连接通道与另一个连接面组成。长连杆有 6 个面，短连杆 4 个，关节 2 个。</em>
+</p>
 
 ### 运动学
 
@@ -107,49 +141,59 @@ $$
 | 3 | 21.34 | 88.5 | 90° | 0–180° |
 | 4 | 0 | 152 | 0° | 0–180° |
 
-标准 DH 为
+验证模型使用标准 DH：
 
 $$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
 \operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
 $$
 
-报告印刷的是另一种顺序 $\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)$，且式 (3.7) 的第三列为零。两种约定给出的末端位置不同。仓库在复算中使用标准 DH，并在 [`docs/errata.md`](docs/errata.md) 中记录差异。
+三段连杆长度之和为 $113.5 + 88.5 + 152 = 354$ mm。计入模型偏置后，采样工作空间最大可达距离约为 **450 mm**。
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="四种装配工作空间" width="760"/>
+  <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="四种装配布局的工作空间对比" width="760"/>
   <br>
-  <em><strong>图 3 — 工作空间对比。</strong>24 种布局中的四种：AyCxBy-D、AyCyBx-D、AyCxBx-D、AyCyBy-D。图中是仿真采样点，不是实测；由模型随机采样得到的最大可达距离约 0.45 m。</em>
+  <em><strong>图 5 — 工作空间对比。</strong>24 种布局中的四种：AyCxBy-D、AyCyBx-D、AyCxBx-D 与 AyCyBy-D。图中为运动学模型的仿真采样。</em>
 </p>
 
-报告中的“能耗”指标是关节加速度（展板文字为一阶速度）的积分，不是电能。本仓库把它称为**运动学代价指标**，并在文档中明确说明。
+装配选型在 24 种布局上比较工作空间包络与运动学代价指标。工作空间研究覆盖上图四种代表性布局。
+
+### 静态分析
+
+静态分析采用 9400A 光敏树脂，在每个关节顶面施加 10 N 载荷。关节外壳与整机装配均在 SolidWorks Simulation 中评估。
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="关节外壳有限元网格" width="380"/>
+  <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="关节外壳静态应力结果" width="380"/>
+  <br>
+  <em><strong>图 6 — 静态分析。</strong>10 N 载荷工况下关节外壳的网格与应力结果。</em>
+</p>
 
 ## 仓库结构
 
 ```text
 OnesArm/
-├── BOM/                    汇总与原始制造清单
-├── electronics/            Gerber、BOM、丝印输出；无 EDA 源
+├── BOM/                    汇总与制造清单
+├── electronics/            Gerber、BOM 与丝印输出
 ├── mechanical/
 │   ├── source/             SolidWorks 零件与装配
 │   ├── output/             STEP、STL 与制造导出
 │   └── analysis/fea/       有限元结果图片
-├── firmware/               STM32 CubeMX 工程 + MicroPython 库
+├── firmware/               STM32CubeIDE 工程 + MicroPython 库
 ├── software/               MATLAB 运动学脚本
 ├── docs/
 │   ├── en/ zh-CN/ fr/      三语长文档
-│   ├── errata.md           理论与证据审查
-│   ├── verification.md     数值复算与测试结果
 │   ├── report/             2025 版报告与答辩 PPT
-│   └── archive/            2024 版报告、研究日志、相关概念
+│   ├── archive/            2024 版报告与研究日志
+│   └── references/         文献与来源
 ├── media/
-│   ├── photos/project/     渲染、样机、PCB 与测试照片
+│   ├── photos/project/     v2 渲染、v1 配置照片、PCB 与测试视图
 │   ├── photos/reference/   报告插图与关键图
-│   ├── gifs/               4 个演示 GIF
-│   ├── videos/             原始 MP4（Git 忽略）
-│   └── source/             可编辑展板源文件（Git 忽略）
-├── data/                   无实测数据（已说明）
-├── scripts/verify_theory/  纯 Python 复算与测试
+│   ├── gifs/               v1 参考配置演示
+│   ├── videos/             原始 MP4
+│   └── source/             可编辑展板源文件
+├── data/                   数据与日志目录
+├── scripts/verify_theory/  纯 Python 运动学与尺寸检查
 ├── README.md README.zh-CN.md README.fr.md
 ├── MIGRATION_NOTES.md CHANGELOG.md CONTRIBUTING.md
 ├── LICENSE.md LICENSE-docs.md
@@ -161,55 +205,83 @@ OnesArm/
 
 摘要见 [`BOM/onesarm_bom.md`](BOM/onesarm_bom.md)，机器可读版本见 [`BOM/onesarm_bom.csv`](BOM/onesarm_bom.csv)。原始清单在 [`BOM/manufacturing/`](BOM/manufacturing/)。
 
-| 类别 | 主要项目 | 数量 |
+### v2 当前平台
+
+| 类别 | v2 项目 | 数量 |
 |---|---|---|
 | 长连杆 | X-X 与 X-Y，5 mm 5052 铝 + 碳管 | 4 + 4 |
 | 短连杆 | 5 mm 5052 铝 | 4 |
 | 关节 | 45° × 1，90° × 2 | 3 |
-| v1 驱动 | 15 kgf·cm PWM 舵机 | 3 |
-| v2 驱动 | 42BYGH47 + FLE-42-20（1:20） | 3 套 |
-| 控制 | Pico W（v1）或 STM32 CAN 平台（v2） | 1 套 |
-| 平台 | 4040 铝型材、350 W 电源 | 1 |
-| 末端 | 夹爪、超声波、气体传感器、手写笔 | 4 个模块 |
+| 驱动 | 42BYGH47 + FLE-42-20，1:20 | 3 套 |
+| 控制 | STM32F103C8T6 CAN 模块 + STM32F407ZGT6 控制器 | 1 套 |
+| 电源 | 350 W 直流电源，XT60 | 1 |
+| 平台 | 4040 铝型材，三块测试板 | 1 |
+| 末端执行器 | 夹爪、超声波、气体传感器、手写笔 | 4 个模块 |
 
-归档没有整机质量、负载或实测功率。
+### v1 参考配置
+
+| 类别 | v1 项目 | 数量 |
+|---|---|---|
+| 驱动 | 15 kgf·cm PWM 舵机 | 3 |
+| 控制器 | Raspberry Pi Pico W | 1 |
+| 模块板 | Base、Joint A/B、Holder/Sensor、Expand Controller | 5 |
+| 互连 | 16P 2.54 mm 金手指 | 按需 |
+| 打印关节 | 9400A 树脂关节外壳 | 3 + 3 |
 
 ## 快速开始
 
-1. **选版本。** v1（舵机/Pico W）或 v2（步进/CAN）。不要混用板卡。
-2. **做机械。** 打印关节外壳、切割/折弯连杆、粘接碳管，按 [`docs/zh-CN/assembly_and_replication.md`](docs/zh-CN/assembly_and_replication.md) 装配。
-3. **做电子。** 按 Gerber 下单并焊 BOM。没有 EDA 源，装配前对照板卡照片。
-4. **跑分析。** MATLAB 脚本在 `software/matlab/kinematics/`；独立 Python 复算在 `scripts/verify_theory/`。
-5. **逐关节上电。** 归档固件是骨架，需要按版本补 PWM 或 CAN 应用。
+### v2 装配
+
+1. **制造结构件。** 使用 `mechanical/output/` 中的 STEP/STL，切割折弯 5 mm 5052 连杆，粘接 50 × 46 mm 碳管，打印 9400A 关节外壳。
+2. **制造电子。** 按 `electronics/output/gerber/controller_monitor/` 中的 Gerber 下单，并按 `electronics/output/bom/controller_monitor/` 备料。
+3. **装配平台。** 搭建 4040 框架，安装 350 W 电源，固定 Controller 与 Monitor 板。
+4. **配置控制。** 用 STM32CubeIDE 打开 `firmware/stm32/` 中的工程，按选定构型配置 CAN 总线与关节模块。
+5. **运行分析。** 使用 `software/matlab/kinematics/` 中的 MATLAB 脚本，以及 `scripts/verify_theory/` 中的独立 Python 检查。
 
 ```bash
-# 独立复算（不需要 MATLAB）
 python scripts/verify_theory/report_checks.py
 python -m unittest discover -s scripts/verify_theory -v
 ```
 
+### v1 参考装配
+
+1. 打印 v1 关节外壳，装配五块 v1 模块板。
+2. 按 `electronics/output/gerber/v1_module_boards/` 中的 Gerber 下单，制作 16P 金手指线束。
+3. 用 `firmware/micropython/` 中的 MicroPython 库烧录 Pico W，并连接舵机电源。
+
 ## 演示与测试
 
-以下 GIF 是**台架演示**，不是受控实验。它们展示整臂运动、扩展控制器 OLED/GNSS 显示、夹爪/手写模块与仿真界面。仓库不声称已测得负载或重复定位精度。
+v2 的 CAD 与平台视图展示当前结构与驱动组件。
 
 <p align="center">
-  <img src="./media/gifs/onesarm_motion.gif" alt="整臂运动演示" width="360"/>
-  <img src="./media/gifs/onesarm_gripper.gif" alt="夹爪/手写演示" width="320"/>
-</p>
-
-<p align="center">
-  <img src="./media/gifs/onesarm_electronics.gif" alt="电子与 OLED 演示" width="420"/>
-  <img src="./media/gifs/onesarm_simulation.gif" alt="仿真界面" width="420"/>
-</p>
-
-<p align="center">
-  <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="模块装配" width="420"/>
-  <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 种装配示意" width="420"/>
+  <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="v2 机械臂与 4040 工作平台" width="820"/>
   <br>
-  <em><strong>图 4 — 装配视图。</strong>左：模块堆叠；右：装配研究使用的 24 种排列/方向组合。</em>
+  <em><strong>图 7 — v2 工作平台。</strong>步进驱动机械臂、铝/碳连杆与 4040 框架。</em>
+</p>
+
+v1 参考配置演示展示舵机/Pico 机械臂运动、扩展控制器 OLED/GNSS 显示、夹爪/手写模块与仿真界面。
+
+<p align="center">
+  <img src="./media/gifs/onesarm_motion.gif" alt="v1 参考配置整臂运动" width="340"/>
+  <img src="./media/gifs/onesarm_gripper.gif" alt="v1 参考配置夹爪演示" width="300"/>
+</p>
+
+<p align="center">
+  <img src="./media/gifs/onesarm_electronics.gif" alt="v1 参考配置 OLED 与 GNSS 演示" width="400"/>
+  <img src="./media/gifs/onesarm_simulation.gif" alt="运动学仿真界面" width="400"/>
+</p>
+
+<p align="center">
+  <img src="./media/photos/project/onesarm_v1_build.jpg" alt="v1 参考配置" width="320"/>
+  <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="模块装配视图" width="420"/>
+  <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 种装配组合" width="420"/>
+  <br>
+  <em><strong>图 8 — v1 参考配置与装配视图。</strong>舵机/Pico 配置、模块堆叠与 24 种排列/方向组合。</em>
 </p>
 
 ## 设计参数
+
+### v2 当前平台
 
 | 参数 | 数值 | 来源 |
 |---|---|---|
@@ -217,49 +289,44 @@ python -m unittest discover -s scripts/verify_theory -v
 | 连杆参数 $d_1, a_2, d_3, a_3, a_4$ | 95、113.5、21.34、88.5、152 mm | 报告表 3-20 |
 | 连杆长度和 | 354 mm | 计算 |
 | 模型最大可达距离 | 约 450 mm | 计算，10,000 次采样 |
-| 报告关节范围 | q1 0°，q2–q4 0–180° | 报告表 3-20 |
-| MATLAB 关节范围 | q1 0°，q2 0–180°，q3/q4 ±90° | `software/matlab/kinematics`（冲突） |
 | 装配数 | 24 种组合 | $3!\,2^{2}$；24 个 CAD 文件 |
+| 驱动 | 42BYGH47 + FLE-42-20，1:20 | 报告 §5.2.2 |
+| 控制器 | STM32F103C8T6 CAN + STM32F407ZGT6 | 报告 §5.2.2 / §5.2.3 |
+| 平台 | 4040 铝型材，350 W 电源 | 报告 §5.2.3 |
+| 结构 | 5 mm 5052 铝板 + 50 × 46 mm 碳管 | 报告 §5.2.1 |
 | 有限元材料 | 9400A 树脂，$E=2.75$ GPa，$\nu=0.44$，1150 kg/m³ | 报告表 3-1 |
 | 有限元载荷 | 每个关节顶面 10 N | 报告 §3.1.2 |
-| v1 舵机 | 15 kgf·cm（1.47 N·m）堵转，6 V 时 0.16 s/60° | 报告 §2.3.1 |
-| v2 驱动 | 42BYGH47 + FLE-42-20，1:20 | 报告 §5.2.2 |
-| 控制器 | Pico W（v1）/ STM32F103 + STM32F407 CAN（v2） | 报告 §2.3.2 / §5.2.2 |
-| 平台 | 4040 铝型材、350 W 电源 | 报告 §5.2.3 |
-| 实测负载、质量、重复精度、功率 | **暂无** | 归档没有测量日志 |
 
-## 勘误与已知问题
+### v1 参考配置
 
-- 报告式 (3.7) 的旋转块奇异（第三列为零）。
-- 报告使用非标准 DH 顺序，MATLAB 使用标准 DH，两者末端位置不同。
-- 表 3-20 与 MATLAB 的第 3/4 关节范围不同。
-- 印刷的一般组合公式 (3.11) 不能得到 24；式 (3.1) 与 CAD 可以。
-- “能耗”指标是运动学代价；`Optimization.m` 是 MediaPipe 姿态可视化，不是该优化。
-- 10 N 作用在 0.354–0.450 m 处为 3.54–4.50 N·m，超过单舵机 1.47 N·m 堵转扭矩。
-- STM32 工程是骨架；没有机械臂固件，也没有 MicroPython `main.py`。
-- 没有 EDA 源，没有实测数据。
+| 参数 | 数值 | 来源 |
+|---|---|---|
+| 驱动 | 15 kgf·cm PWM 舵机，5–9 V，180° | 报告 §2.3.1 |
+| 控制器 | Raspberry Pi Pico W，RP2040 | 报告 §2.3.2 |
+| 模块板 | Base、Joint A/B、Holder/Sensor、Expand Controller | 报告 §2.3.2 |
+| 互连 | 16P 2.54 mm 金手指 | 报告 §2.3.2 |
+| 逻辑供电 | 5 V | 报告 §2.3.2 |
 
-详见 [`docs/errata.md`](docs/errata.md) 与 [`docs/verification.md`](docs/verification.md)。
+## 技术文档
 
-## 路线图
+- [工作原理](docs/zh-CN/theory_of_operation.md)
+- [机械设计](docs/zh-CN/mechanical_design.md)
+- [电子与控制](docs/zh-CN/electronics_and_control.md)
+- [装配与复现](docs/zh-CN/assembly_and_replication.md)
+- [验证](docs/verification.md)
+- [术语表](docs/glossary.md)
 
-1. 冻结硬件版本，解决 42BYGH27/47 冲突。
-2. 统一 DH 约定，重画图表，并对 24 种装配实现逆运动学与代价指标。
-3. 补一条最小 PWM/CAN 固件路径，并记录一组关节跟踪数据。
-4. 找回 EDA 源，发布可制造板卡版本。
-5. 在规定力臂下测量负载、重复精度、质量与输入功率。
+英文与法文版本见 [`docs/en/`](docs/en/) 与 [`docs/fr/`](docs/fr/)。
 
 ## 贡献
 
-见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。不要加入未经测量的数字；第三方图片必须附来源与许可说明。
+见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。第三方图片请附来源与许可说明。
 
 ## 许可证
 
 - **代码、固件与脚本：** [MIT](LICENSE.md)。
 - **文档、原始 CAD、照片与图：** [CC BY 4.0](LICENSE-docs.md)。
 - **第三方图片、论文、视频与商标：** 不在上述许可范围内，见 [`docs/references/README.md`](docs/references/README.md)。
-
-公开发布前，作者应确认许可证选择。
 
 ## 致谢
 

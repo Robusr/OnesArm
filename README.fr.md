@@ -1,21 +1,22 @@
 <p align="center">
-  <img src="./media/photos/project/banner.jpg" alt="Rendu du bras robotique modulaire OnesArm" width="900"/>
+  <img src="./media/photos/project/banner.jpg" alt="Bras robotique modulaire OnesArm v2 sur une plateforme aluminium 4040" width="900"/>
 </p>
 
 <h1 align="center">OnesArm (珠联“臂”合)</h1>
 
 <p align="center">
-  <strong>Un bras robotique série modulaire et reconfigurable pour des tâches multi-scénarios</strong>
+  <strong>Bras robotique série modulaire pour des tâches multi-scénarios</strong>
   <br>
-  24 configurations articulaires, une interface tenon-mortaise et deux révisions matérielles documentées
+  Plateforme v2 pas à pas/CAN, 24 configurations articulaires et interfaces tenon-mortaise
 </p>
 
 <p align="center">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/code-MIT-blue.svg" alt="Code : MIT"></a>
   <a href="./LICENSE-docs.md"><img src="https://img.shields.io/badge/docs%20%26%20CAD-CC%20BY%204.0-lightgrey.svg" alt="Documentation et CAO : CC BY 4.0"></a>
   <img src="https://img.shields.io/badge/CAD-SolidWorks-e63946" alt="SolidWorks">
-  <img src="https://img.shields.io/badge/control-STM32%20%7C%20RP2040-00549f" alt="STM32 et RP2040">
-  <img src="https://img.shields.io/badge/status-research%20prototype-orange" alt="Prototype de recherche">
+  <img src="https://img.shields.io/badge/control-STM32%20CAN-00549f" alt="STM32 CAN">
+  <img src="https://img.shields.io/badge/platform-350%20W-2e7d32" alt="Plateforme 350 W">
+  <img src="https://img.shields.io/badge/status-v2%20current-brightgreen" alt="v2 actuelle">
 </p>
 
 <p align="center">
@@ -28,28 +29,32 @@
 
 ## À propos du projet
 
-**OnesArm** (titre chinois : 珠联“臂”合) est un bras robotique série modulaire composé de modules d’articulation, de bielle et d’effecteur interchangeables. Au lieu d’une chaîne cinématique figée, le bras s’assemble par des interfaces normalisées **T/N à tenon et mortaise**. Pour le prototype à trois modules, l’orientation du module adjacent à la base est fixe et les deux autres modules choisissent chacun l’un de deux canaux perpendiculaires, ce qui donne
+**OnesArm** (titre chinois : 珠联“臂”合) est un bras robotique série modulaire. **La v2 est la plateforme actuelle.** Elle associe des moteurs pas à pas 42BYGH47 à des réducteurs planétaires FLE-42-20, des modules CAN STM32F103C8T6, un contrôleur de bus STM32F407ZGT6, une alimentation de 350 W et une plateforme en profilé aluminium 4040. Les bielles utilisent une tôle d’aluminium 5052 de 5 mm et des tubes en fibre de carbone de 50 × 46 mm, reliés par des nœuds M5 normalisés.
+
+Le bras s’assemble à partir de modules d’articulation, de bielle et d’effecteur interchangeables via des interfaces **T/N à tenon et mortaise**. Pour la configuration à trois modules, l’orientation adjacente à la base est fixe et les deux autres modules choisissent l’un de deux canaux perpendiculaires, ce qui donne
 
 $$
 N_3 = 3! \cdot 2^{3-1} = 24
 $$
 
-configurations articulaires. Les 24 assemblages existent en modèles SolidWorks.
+configurations articulaires. Les 24 assemblages sont modélisés dans SolidWorks.
 
-Le projet a été développé par 郭沫晗 (Guo Mohan) au lycée n° 1 de Guyuan, Ningxia. Le rapport mentionne un premier prix au 38e Concours national chinois d’innovation scientifique et technologique des jeunes (2024). Le dépôt distingue ce qui est **documenté**, ce qui est **calculé** et ce qui n’est **pas mesuré**.
+La **configuration de référence v1**, avec servomoteurs PWM de 15 kgf·cm et Raspberry Pi Pico W, est conservée dans le dépôt pour comparaison. Le projet a été développé par 郭沫晗 (Guo Mohan) au lycée n° 1 de Guyuan, Ningxia. Le rapport mentionne un premier prix au 38e Concours national chinois d’innovation scientifique et technologique des jeunes (2024).
 
-> **Deux révisions sont documentées.** La v1 utilise des servomoteurs PWM de 15 kgf·cm et un Raspberry Pi Pico W. La v2 utilise des moteurs pas à pas 42BYGH47, des réducteurs FLE-42-20 et une plateforme STM32 CAN. Elles ne sont pas compatibles broche à broche. Lire [`docs/errata.md`](docs/errata.md) avant toute commande.
+> **Note de plateforme.** La v1 et la v2 utilisent des systèmes électroniques distincts. Sélectionner l’ensemble moteur et cartes correspondant avant l’assemblage.
 
 ## Caractéristiques principales
 
-- **24 configurations articulaires** — trois modules interchangeables, deux canaux perpendiculaires, orientation adjacente à la base fixe.
-- **Interface tenon-mortaise** — nœud T en haut, nœud N en bas, serrage par vis M5 ; inspirée de la queue d’aronde et de l’assemblage à mi-bois.
-- **Deux générations d’entraînement documentées** — prototype servomoteur/Pico W et plateforme pas à pas/CAN avec alimentation 350 W.
+- **Chaîne d’entraînement v2 pas à pas/CAN** — moteurs 42BYGH47, réducteurs FLE-42-20 1:20, commande en boucle fermée par encodeur magnétique et modules CAN STM32F103C8T6.
+- **Structure v2 aluminium/carbone** — bielles en 5052 de 5 mm, tubes carbone de 50 × 46 mm, nœuds M5, plateforme 4040 et alimentation 350 W, avec sources SolidWorks, STEP et STL.
+- **24 configurations reconfigurables** — trois modules interchangeables, deux canaux perpendiculaires et orientation adjacente à la base fixe.
+- **Interface T/N à tenon et mortaise** — nœud T en haut, nœud N en bas, serrage par vis M5, inspirée de la queue d’aronde et de l’assemblage à mi-bois.
+- **Configuration de référence v1** — servomoteurs PWM de 15 kgf·cm, Raspberry Pi Pico W, cinq cartes de module et interconnexion peigne 16P.
 - **Effecteurs multi-scénarios** — pince parallèle, sonde HC-SR04, capteur de gaz MQ et module stylo sur la même interface.
-- **Dossier de fabrication ouvert** — sources SolidWorks, STEP/STL, Gerber, nomenclature et listes de fabrication.
-- **Revue reproductible** — errata et vérifications Python pour les transformations DH, les limites articulaires, l’espace de travail et le cas de charge.
 
 ## Architecture du système
+
+### Plateforme v2 actuelle
 
 ```text
                     ┌──────────────────────────────┐
@@ -59,42 +64,71 @@ Le projet a été développé par 郭沫晗 (Guo Mohan) au lycée n° 1 de Guyua
                                    │ interface T/N
                     ┌──────────────┴───────────────┐
                     │  Module de bielle (XX/XY/court)│
+                    │  tôle 5052 5 mm + tube carbone │
                     └──────────────┬───────────────┘
                                    │
                     ┌──────────────┴───────────────┐
                     │  Module d’articulation (45°/90°)│
-                    │  entraînement + roulement + PCB│
+                    │  42BYGH47 + FLE-42-20 + CAN   │
                     └──────────────┬───────────────┘
                                    │
                     ┌──────────────┴───────────────┐
-                    │  Base + plateforme + alimentation│
+                    │  Plateforme 4040 + 350 W      │
+                    │  Contrôleur CAN STM32F407ZGT6 │
                     └──────────────────────────────┘
 ```
 
-| Révision | Contrôleur | Entraînement | Bus de module | Alimentation |
-|---|---|---|---|---|
-| **v1** | Raspberry Pi Pico W (RP2040, Wi-Fi) | Servomoteur PWM 15 kgf·cm | Peigne 16P 2,54 mm | Rail servo 5–9 V |
-| **v2** | Modules CAN STM32F103C8T6 + contrôleur STM32F407ZGT6 | 42BYGH47 + FLE-42-20 (1:20) | CAN (TJA1050) | 350 W continu, XT60 |
+| Sous-système | Implémentation v2 |
+|---|---|
+| Contrôleur | Contrôleur de bus CAN STM32F407ZGT6 ; module CAN STM32F103C8T6 dans chaque articulation |
+| Entraînement | Moteur pas à pas 42BYGH47 + réducteur planétaire FLE-42-20, 1:20 ; boucle fermée par encodeur magnétique |
+| Bus et alimentation | CAN via TJA1050 ; alimentation 350 W ; entrée XT60 ; rail logique LM2596-5.0 |
+| Structure | Tôle aluminium 5052 de 5 mm + tubes carbone 50 × 46 mm ; nœuds M5 ; plateforme aluminium 4040 |
+| Effecteurs | Pince parallèle, sonde HC-SR04, capteur de gaz MQ, module stylo |
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="Face de connexion - canal de connexion - face de connexion" width="520"/>
-  <img src="./media/photos/reference/key_figures/fig5-8_concat_structure.png" alt="Chaîne modulaire concaténée" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig5-1_xx_link_render.jpg" alt="Rendu de la bielle longue X-X v2" width="340"/>
+  <img src="./media/photos/reference/key_figures/fig5-2_xy_link_render.jpg" alt="Rendu de la bielle longue X-Y v2" width="340"/>
   <br>
-  <em><strong>Figure 1 — Abstraction FCF.</strong> Chaque connexion est une face, un canal et une autre face. Les bielles longues ont six faces, les bielles courtes quatre, les articulations deux.</em>
+  <em><strong>Figure 1 — Bielles longues v2.</strong> Bielles X-X et X-Y en aluminium 5052 de 5 mm avec tubes carbone de 50 × 46 mm et nœuds M5.</em>
 </p>
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-4_drive_module_render.jpg" alt="Rendu du module d’entraînement" width="420"/>
-  <img src="./media/photos/project/onesarm_prototype_small.jpg" alt="Prototype OnesArm" width="260"/>
+  <img src="./media/photos/reference/key_figures/fig5-4_drive_module_render.jpg" alt="Module moteur pas à pas et réducteur v2" width="380"/>
+  <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="Bras v2 sur une plateforme 4040" width="520"/>
   <br>
-  <em><strong>Figure 2 — Module d’entraînement et prototype.</strong> Le prototype 2024 utilise des boîtiers imprimés, des bielles en tôle et une base à quatre ventouses. Le rendu v2 montre l’ensemble pas à pas/réducteur.</em>
+  <em><strong>Figure 2 — Module d’entraînement et plateforme v2.</strong> Moteur 42BYGH47, réducteur FLE-42-20, carte CAN et plateforme aluminium 4040.</em>
+</p>
+
+### Configuration de référence v1
+
+| Sous-système | Implémentation v1 |
+|---|---|
+| Contrôleur | Raspberry Pi Pico W, RP2040, Wi-Fi |
+| Entraînement | Servomoteur numérique PWM 15 kgf·cm |
+| Bus | Interconnexion peigne 16P 2,54 mm |
+| Cartes | Base, Joint A, Joint B, Holder/Sensor, Expand Controller |
+| Alimentation | Rail servo 5–9 V ; logique 5 V |
+
+<p align="center">
+  <img src="./media/photos/project/banner_v1.jpg" alt="Rendu de la configuration de référence v1" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig2-19_pcb_joint_module.png" alt="Carte d’articulation v1" width="360"/>
+  <br>
+  <em><strong>Figure 3 — Configuration de référence v1.</strong> Rendu du bras à servomoteurs et carte Joint Module avec sorties PWM, LED d’état et sélecteur de signal servo.</em>
 </p>
 
 ## Théorie et conception
 
 ### Combinaisons modulaires
 
-Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion – Face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux ; une bielle courte 4 × 4 ; une articulation 2 × 4. Pour le prototype à trois modules, le module 45° et les deux modules 90° peuvent être ordonnés de $3!$ façons ; l’orientation adjacente à la base est fixe et les deux autres donnent $2^2$. Le résultat est 24, vérifié par 24 assemblages CAO et 3 modèles d’articulation seule.
+Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion – Face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux ; une bielle courte 4 × 4 ; une articulation 2 × 4. Pour la configuration à trois modules, le module 45° et les deux modules 90° peuvent être ordonnés de $3!$ façons ; l’orientation adjacente à la base est fixe et les deux autres donnent $2^2$. Le résultat est 24, vérifié par 24 assemblages CAO et 3 modèles d’articulation seule.
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="Face de connexion - canal de connexion - face de connexion" width="520"/>
+  <img src="./media/photos/reference/key_figures/fig5-8_concat_structure.png" alt="Chaîne modulaire concaténée" width="520"/>
+  <br>
+  <em><strong>Figure 4 — Abstraction FCF.</strong> Chaque connexion est une face, un canal et une autre face. Les bielles longues ont six faces, les bielles courtes quatre, les articulations deux.</em>
+</p>
 
 ### Cinématique
 
@@ -107,49 +141,59 @@ La configuration analysée est **AyCxBy-D**, une chaîne à 4 DDL. La table 3-20
 | 3 | 21.34 | 88.5 | 90° | 0–180° |
 | 4 | 0 | 152 | 0° | 0–180° |
 
-La DH standard s’écrit
+Le modèle de vérification utilise la DH standard :
 
 $$
 T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
 \operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
 $$
 
-Le rapport imprime un autre ordre, $\operatorname{Rot}_z\operatorname{Rot}_x\operatorname{Trans}(a,0,0)\operatorname{Trans}(0,0,d)$, et l’équation (3.7) a une troisième colonne nulle. Les deux conventions donnent des positions différentes. Le dépôt utilise la DH standard pour la vérification et consigne l’écart dans [`docs/errata.md`](docs/errata.md).
+La somme des bielles vaut $113.5 + 88.5 + 152 = 354$ mm. Avec les décalages du modèle, l’espace de travail échantillonné atteint environ **450 mm**.
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Espaces de travail de quatre assemblages" width="760"/>
+  <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Comparaison des espaces de travail de quatre assemblages" width="760"/>
   <br>
-  <em><strong>Figure 3 — Comparaison des espaces de travail.</strong> Quatre des 24 configurations : AyCxBy-D, AyCyBx-D, AyCxBx-D et AyCyBy-D. Ce sont des échantillons de simulation, pas des mesures. L’enveloppe aléatoire du modèle donne une portée maximale d’environ 0,45 m.</em>
+  <em><strong>Figure 5 — Comparaison des espaces de travail.</strong> Quatre des 24 configurations : AyCxBy-D, AyCyBx-D, AyCxBx-D et AyCyBy-D. Échantillons de simulation du modèle cinématique.</em>
 </p>
 
-L’indice d’« énergie » du rapport est une intégrale de l’accélération articulaire (ou de la vitesse, dans le panneau), pas une énergie électrique. Le dépôt le traite comme un **indicateur d’effort cinématique** et le dit explicitement.
+La sélection d’assemblage compare les enveloppes de travail et un indicateur d’effort cinématique sur les 24 configurations. L’étude d’espace de travail couvre les quatre configurations représentatives ci-dessus.
+
+### Analyse statique
+
+L’analyse statique utilise la résine photopolymère 9400A et une charge de 10 N sur chaque face supérieure d’articulation. Les boîtiers d’articulation et l’assemblage complet sont évalués dans SolidWorks Simulation.
+
+<p align="center">
+  <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="Maillage éléments finis du boîtier d’articulation" width="380"/>
+  <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="Résultat de contrainte statique du boîtier d’articulation" width="380"/>
+  <br>
+  <em><strong>Figure 6 — Analyse statique.</strong> Maillage et contrainte du boîtier d’articulation sous une charge de 10 N.</em>
+</p>
 
 ## Structure du dépôt
 
 ```text
 OnesArm/
-├── BOM/                    synthèse + listes de fabrication originales
-├── electronics/            Gerber, nomenclature et sérigraphie ; pas de source EDA
+├── BOM/                    synthèse + listes de fabrication
+├── electronics/            sorties Gerber, BOM et sérigraphie
 ├── mechanical/
 │   ├── source/             pièces et assemblages SolidWorks
 │   ├── output/             exports STEP, STL et fabrication
 │   └── analysis/fea/       images EF exportées
-├── firmware/               projets STM32 CubeMX + bibliothèques MicroPython
+├── firmware/               projets STM32CubeIDE + bibliothèques MicroPython
 ├── software/               scripts MATLAB de cinématique
 ├── docs/
-│   ├── en/ zh-CN/ fr/      documentation longue en trois langues
-│   ├── errata.md           revue théorique et des preuves
-│   ├── verification.md     vérifications numériques et résultats
+│   ├── en/ zh-CN/ fr/      documentation longue
 │   ├── report/             rapport 2025 et soutenance
-│   └── archive/            rapport 2024, journal, concept associé
+│   ├── archive/            rapport 2024 et journal de recherche
+│   └── references/         citations et provenance
 ├── media/
-│   ├── photos/project/     rendus, prototype, PCB et photos d’essai
+│   ├── photos/project/     rendus v2, photos v1, PCB et vues d’essai
 │   ├── photos/reference/   figures du rapport et figures clés
-│   ├── gifs/               quatre GIF de démonstration
-│   ├── videos/             MP4 originaux (ignorés par Git)
-│   └── source/             fichiers de panneaux éditables (ignorés par Git)
-├── data/                   pas de données mesurées (documenté)
-├── scripts/verify_theory/  vérifications et tests Python
+│   ├── gifs/               démonstrations de la configuration v1
+│   ├── videos/             fichiers MP4 originaux
+│   └── source/             fichiers de panneaux éditables
+├── data/                   répertoire de données et journaux
+├── scripts/verify_theory/  vérifications Python de cinématique et dimensions
 ├── README.md README.zh-CN.md README.fr.md
 ├── MIGRATION_NOTES.md CHANGELOG.md CONTRIBUTING.md
 ├── LICENSE.md LICENSE-docs.md
@@ -161,55 +205,83 @@ OnesArm/
 
 Une synthèse est dans [`BOM/onesarm_bom.md`](BOM/onesarm_bom.md), la version lisible par machine dans [`BOM/onesarm_bom.csv`](BOM/onesarm_bom.csv). Les listes originales sont dans [`BOM/manufacturing/`](BOM/manufacturing/).
 
-| Groupe | Éléments principaux | Quantité |
+### Plateforme v2 actuelle
+
+| Groupe | Éléments v2 | Quantité |
 |---|---|---|
 | Bielles longues | X-X et X-Y, aluminium 5052 de 5 mm + tube carbone | 4 + 4 |
 | Bielles courtes | Aluminium 5052 de 5 mm | 4 |
 | Articulations | 45° × 1, 90° × 2 | 3 |
-| Entraînement v1 | Servomoteur PWM 15 kgf·cm | 3 |
-| Entraînement v2 | 42BYGH47 + FLE-42-20 (1:20) | 3 ensembles |
-| Commande | Pico W (v1) ou plateforme STM32 CAN (v2) | 1 ensemble |
-| Plateforme | Profilé aluminium 4040, alimentation 350 W | 1 |
-| Effecteurs | pince, ultrasons, gaz, stylo | 4 modules |
+| Entraînement | 42BYGH47 + FLE-42-20, 1:20 | 3 ensembles |
+| Commande | Modules CAN STM32F103C8T6 + contrôleur STM32F407ZGT6 | 1 ensemble |
+| Alimentation | 350 W continu, XT60 | 1 |
+| Plateforme | Profilé aluminium 4040, trois plaques d’essai | 1 |
+| Effecteurs | Pince, ultrasons, capteur de gaz, stylo | 4 modules |
 
-L’archive ne donne ni masse totale, ni charge utile, ni puissance mesurée.
+### Configuration de référence v1
+
+| Groupe | Éléments v1 | Quantité |
+|---|---|---|
+| Entraînement | Servomoteur PWM 15 kgf·cm | 3 |
+| Contrôleur | Raspberry Pi Pico W | 1 |
+| Cartes de module | Base, Joint A/B, Holder/Sensor, Expand Controller | 5 |
+| Interconnexion | Peigne 16P 2,54 mm | Selon besoin |
+| Articulations imprimées | Boîtiers en résine 9400A | 3 + 3 |
 
 ## Démarrage
 
-1. **Choisir une révision.** v1 (servo/Pico W) ou v2 (pas à pas/CAN). Ne pas mélanger les cartes.
-2. **Construire la mécanique.** Imprimer les boîtiers, découper/plier les bielles, coller les tubes carbone et monter la visserie selon [`docs/fr/assembly_and_replication.md`](docs/fr/assembly_and_replication.md).
-3. **Fabriquer l’électronique.** Commander les Gerber et monter la nomenclature. Sans source EDA, vérifier les photos des cartes.
-4. **Lancer l’analyse.** Scripts MATLAB dans `software/matlab/kinematics/` ; vérifications Python dans `scripts/verify_theory/`.
-5. **Mettre sous tension une articulation à la fois.** Le firmware archivé est un squelette ; ajouter l’application PWM ou CAN de la révision.
+### Assemblage v2
+
+1. **Fabriquer la structure.** Utiliser les STEP/STL de `mechanical/output/`, découper et plier les bielles 5052 de 5 mm, coller les tubes carbone 50 × 46 mm et imprimer les boîtiers 9400A.
+2. **Fabriquer l’électronique.** Commander les Gerber de `electronics/output/gerber/controller_monitor/` et monter la nomenclature de `electronics/output/bom/controller_monitor/`.
+3. **Assembler la plateforme.** Construire le cadre 4040, installer l’alimentation 350 W et fixer les cartes Controller et Monitor.
+4. **Configurer la commande.** Ouvrir les projets STM32CubeIDE de `firmware/stm32/` et configurer le bus CAN et les modules d’articulation pour la configuration choisie.
+5. **Lancer l’analyse.** Utiliser les scripts MATLAB de `software/matlab/kinematics/` et les vérifications Python de `scripts/verify_theory/`.
 
 ```bash
-# vérifications indépendantes (sans MATLAB)
 python scripts/verify_theory/report_checks.py
 python -m unittest discover -s scripts/verify_theory -v
 ```
 
+### Assemblage de référence v1
+
+1. Imprimer les boîtiers v1 et assembler les cinq cartes de module v1.
+2. Commander les Gerber de `electronics/output/gerber/v1_module_boards/` et réaliser le faisceau peigne 16P.
+3. Flasher le Pico W avec les bibliothèques MicroPython de `firmware/micropython/` et connecter le rail servo.
+
 ## Démonstration et essais
 
-Les GIF ci-dessous sont des **démonstrations au banc**, pas des expériences contrôlées. Ils montrent le bras en mouvement, l’écran OLED/GNSS du contrôleur d’extension, la pince/le module stylo et une vue de simulation. Aucune charge utile ni répétabilité mesurée n’est revendiquée.
+Les vues CAO et plateforme v2 présentent la structure et l’ensemble d’entraînement actuels.
 
 <p align="center">
-  <img src="./media/gifs/onesarm_motion.gif" alt="Démonstration de mouvement" width="360"/>
-  <img src="./media/gifs/onesarm_gripper.gif" alt="Démonstration de la pince" width="320"/>
-</p>
-
-<p align="center">
-  <img src="./media/gifs/onesarm_electronics.gif" alt="Démonstration électronique et OLED" width="420"/>
-  <img src="./media/gifs/onesarm_simulation.gif" alt="Vue de simulation" width="420"/>
-</p>
-
-<p align="center">
-  <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Assemblage de modules" width="420"/>
-  <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="Schéma des 24 assemblages" width="420"/>
+  <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="Bras v2 sur la plateforme de travail 4040" width="820"/>
   <br>
-  <em><strong>Figure 4 — Vues d’assemblage.</strong> À gauche : empilement de modules. À droite : les 24 combinaisons permutation/orientation de l’étude.</em>
+  <em><strong>Figure 7 — Plateforme de travail v2.</strong> Bras à moteurs pas à pas, bielles aluminium/carbone et cadre 4040.</em>
+</p>
+
+Les démonstrations de la configuration de référence v1 montrent le bras servo/Pico en mouvement, l’écran OLED/GNSS du contrôleur d’extension, la pince/le module stylo et la vue de simulation.
+
+<p align="center">
+  <img src="./media/gifs/onesarm_motion.gif" alt="Mouvement du bras de référence v1" width="340"/>
+  <img src="./media/gifs/onesarm_gripper.gif" alt="Démonstration de la pince de référence v1" width="300"/>
+</p>
+
+<p align="center">
+  <img src="./media/gifs/onesarm_electronics.gif" alt="Démonstration OLED et GNSS de référence v1" width="400"/>
+  <img src="./media/gifs/onesarm_simulation.gif" alt="Vue de simulation cinématique" width="400"/>
+</p>
+
+<p align="center">
+  <img src="./media/photos/project/onesarm_v1_build.jpg" alt="Configuration de référence v1" width="320"/>
+  <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Vue d’assemblage des modules" width="420"/>
+  <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 combinaisons d’assemblage" width="420"/>
+  <br>
+  <em><strong>Figure 8 — Configuration de référence v1 et vues d’assemblage.</strong> Configuration servo/Pico, empilement de modules et les 24 combinaisons permutation/orientation.</em>
 </p>
 
 ## Spécifications
+
+### Plateforme v2 actuelle
 
 | Paramètre | Valeur | Source |
 |---|---|---|
@@ -217,49 +289,44 @@ Les GIF ci-dessous sont des **démonstrations au banc**, pas des expériences co
 | Longueurs $d_1, a_2, d_3, a_3, a_4$ | 95 ; 113,5 ; 21,34 ; 88,5 ; 152 mm | Rapport table 3-20 |
 | Somme des bielles | 354 mm | Calcul |
 | Portée maximale du modèle | environ 450 mm | Calcul, 10 000 échantillons |
-| Limites du rapport | q1 0°, q2–q4 0–180° | Rapport table 3-20 |
-| Limites MATLAB | q1 0°, q2 0–180°, q3/q4 ±90° | `software/matlab/kinematics` (conflit) |
 | Assemblages | 24 combinaisons | $3!\,2^{2}$ ; 24 fichiers CAO |
-| Matériau EF | résine 9400A, $E=2,75$ GPa, $\nu=0,44$, 1150 kg/m³ | Rapport table 3-1 |
+| Entraînement | 42BYGH47 + FLE-42-20, 1:20 | Rapport §5.2.2 |
+| Contrôleur | STM32F103C8T6 CAN + STM32F407ZGT6 | Rapport §5.2.2 / §5.2.3 |
+| Plateforme | Profilé aluminium 4040, alimentation 350 W | Rapport §5.2.3 |
+| Structure | Tôle aluminium 5052 de 5 mm + tube carbone 50 × 46 mm | Rapport §5.2.1 |
+| Matériau EF | Résine 9400A, $E=2.75$ GPa, $\nu=0.44$, 1150 kg/m³ | Rapport table 3-1 |
 | Charge EF | 10 N sur chaque face supérieure d’articulation | Rapport §3.1.2 |
-| Servomoteur v1 | 15 kgf·cm (1,47 N·m) au décrochage, 0,16 s/60° à 6 V | Rapport §2.3.1 |
-| Entraînement v2 | 42BYGH47 + FLE-42-20, 1:20 | Rapport §5.2.2 |
-| Contrôleur | Pico W (v1) / STM32F103 + STM32F407 CAN (v2) | Rapport §2.3.2 / §5.2.2 |
-| Plateforme | Profilé 4040, alimentation 350 W | Rapport §5.2.3 |
-| Charge utile, masse, répétabilité, puissance mesurées | **Non disponibles** | Pas de journal de mesure |
 
-## Errata et problèmes connus
+### Configuration de référence v1
 
-- L’équation (3.7) du rapport a un bloc de rotation singulier (troisième colonne nulle).
-- Le rapport utilise un ordre DH non standard ; MATLAB utilise la DH standard. Les positions diffèrent.
-- Les limites des articulations 3/4 diffèrent entre le tableau et MATLAB.
-- La formule générale (3.11) ne redonne pas 24 ; l’équation (3.1) et la CAO le font.
-- L’indice d’« énergie » est un indicateur cinématique ; `Optimization.m` est un visualiseur MediaPipe, pas cette optimisation.
-- 10 N à 0,354–0,450 m valent 3,54–4,50 N·m, au-delà du couple de décrochage de 1,47 N·m d’un servomoteur.
-- Les projets STM32 sont des squelettes ; aucun firmware de bras ni `main.py` MicroPython n’est fourni.
-- Aucune source EDA, aucune donnée mesurée.
+| Paramètre | Valeur | Source |
+|---|---|---|
+| Entraînement | Servomoteur PWM 15 kgf·cm, 5–9 V, 180° | Rapport §2.3.1 |
+| Contrôleur | Raspberry Pi Pico W, RP2040 | Rapport §2.3.2 |
+| Cartes de module | Base, Joint A/B, Holder/Sensor, Expand Controller | Rapport §2.3.2 |
+| Interconnexion | Peigne 16P 2,54 mm | Rapport §2.3.2 |
+| Alimentation logique | 5 V | Rapport §2.3.2 |
 
-Voir [`docs/errata.md`](docs/errata.md) et [`docs/verification.md`](docs/verification.md).
+## Documentation
 
-## Feuille de route
+- [Principe de fonctionnement](docs/fr/theory_of_operation.md)
+- [Conception mécanique](docs/fr/mechanical_design.md)
+- [Électronique et commande](docs/fr/electronics_and_control.md)
+- [Assemblage et reproduction](docs/fr/assembly_and_replication.md)
+- [Vérification](docs/verification.md)
+- [Glossaire](docs/glossary.md)
 
-1. Figer la révision matérielle et résoudre 42BYGH27/47.
-2. Adopter une seule convention DH, régénérer les figures et implémenter la cinématique inverse et l’indicateur d’effort sur les 24 assemblages.
-3. Ajouter un chemin firmware PWM/CAN minimal et un journal de suivi articulaire mesuré.
-4. Retrouver la source EDA et publier une révision de cartes fabricable.
-5. Mesurer charge utile, répétabilité, masse et puissance à un bras de levier défini.
+Les versions anglaise et chinoise sont dans [`docs/en/`](docs/en/) et [`docs/zh-CN/`](docs/zh-CN/).
 
 ## Contribution
 
-Voir [`CONTRIBUTING.md`](CONTRIBUTING.md). Ne pas ajouter de nombres non mesurés ni de figures tierces sans mention de licence.
+Voir [`CONTRIBUTING.md`](CONTRIBUTING.md). Ajouter la source et la licence des figures tierces.
 
 ## Licence
 
 - **Code, firmware et scripts :** [MIT](LICENSE.md).
 - **Documentation, CAO originale, photos et schémas :** [CC BY 4.0](LICENSE-docs.md).
 - **Figures, articles, vidéos et marques tierces :** exclus des deux licences. Voir [`docs/references/README.md`](docs/references/README.md).
-
-L’auteur doit confirmer le choix de licence avant une publication publique.
 
 ## Remerciements
 
