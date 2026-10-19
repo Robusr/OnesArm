@@ -114,15 +114,11 @@ The modular interface is a **connecting face – connecting channel – connecti
 
 For <i>F</i> joint modules, <i>N</i><sub>LL</sub> long links and <i>N</i><sub>LS</sub> short links, the FCF connection-method total is:
 
-```text
-N_com = Σ_{i=0}^{N_LL} Σ_{j=0}^{N_LS} 8^F · 18^{N_LL} · 12^{N_LS}
-```
+$$\displaystyle N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^{F} \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}$$
 
 The three-module assembly fixes the base-adjacent orientation and gives the remaining two modules two perpendicular channels each:
 
-```text
-N₃ = 3! × 2² = 24
-```
+$$N_3 = 3! \cdot 2^{3-1} = 24$$
 
 The 24 combinations are modelled as SolidWorks assemblies.
 
@@ -146,22 +142,16 @@ The analysed configuration is **AyCxBy-D**, a 4-DOF chain. Report Table 3-20 giv
 
 The standard DH transform is:
 
-```text
-T_i^{i-1} =
-[ cθ_i  -sθ_i·cα_i   sθ_i·sα_i   a_i·cθ_i ]
-[ sθ_i   cθ_i·cα_i  -cθ_i·sα_i   a_i·sθ_i ]
-[ 0      sα_i        cα_i        d_i      ]
-[ 0      0            0            1        ]
-
-T_4^0 = T_1^0 · T_2^1 · T_3^2 · T_4^3
-```
+$$T_i^{i-1} = \begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix}, \qquad T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3$$
 
 The workspace is the set of tool positions over the joint ranges:
 
-```text
-W = { p(q) | q_i ∈ [q_i,min, q_i,max] }
-p(q) = [T_4^0(q)]_{1:3,4}
-```
+$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 The link-length sum is 113.5 + 88.5 + 152 = 354 mm. With the model offsets, the sampled workspace reaches about 450 mm.
 
@@ -177,23 +167,15 @@ The v2 XY long link is evaluated as a static assembly. The base connection is fi
 
 The finite element solution is:
 
-```text
-K·u = f
-```
+$$K u = f$$
 
 where K is the stiffness matrix, u the nodal displacement vector and f the nodal load vector. The same load path can be checked with the cantilever relations:
 
-```text
-M = F·L
-σ = M·c / I
-δ = F·L³ / (3·E·I)
-```
+$$M = FL, \qquad \sigma = \frac{Mc}{I}, \qquad \delta = \frac{FL^3}{3EI}$$
 
 The v2 study reports a displacement-magnitude (URES) contour with a maximum of:
 
-```text
-u_max = 1.388 × 10⁻² mm
-```
+$$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="v2 XY long link static displacement contour" width="480"/>
@@ -205,9 +187,7 @@ u_max = 1.388 × 10⁻² mm
 
 The v2 board uses the absolute joint-velocity integral as the assembly-selection index:
 
-```text
-E_Sum = Σ_{i=1}^{F} | ∫_0^t (dθ_i/dt) dτ |
-```
+$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
 
 The selection compares E_Sum with the workspace envelope. The workflow is:
 

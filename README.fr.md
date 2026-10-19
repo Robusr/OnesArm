@@ -114,15 +114,11 @@ L’interface modulaire est une chaîne **face de connexion – canal de connexi
 
 Pour <i>F</i> modules d’articulation, <i>N</i><sub>LL</sub> bielles longues et <i>N</i><sub>LS</sub> bielles courtes, le total FCF vaut :
 
-```text
-N_com = Σ_{i=0}^{N_LL} Σ_{j=0}^{N_LS} 8^F · 18^{N_LL} · 12^{N_LS}
-```
+$$\displaystyle N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^{F} \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}$$
 
 L’assemblage à trois modules fixe l’orientation adjacente à la base et donne aux deux autres modules deux canaux perpendiculaires chacun :
 
-```text
-N₃ = 3! × 2² = 24
-```
+$$N_3 = 3! \cdot 2^{3-1} = 24$$
 
 Les 24 combinaisons sont modélisées dans SolidWorks.
 
@@ -146,22 +142,16 @@ La configuration analysée est **AyCxBy-D**, une chaîne à 4 DDL. La table 3-20
 
 La transformation DH standard est :
 
-```text
-T_i^{i-1} =
-[ cθ_i  -sθ_i·cα_i   sθ_i·sα_i   a_i·cθ_i ]
-[ sθ_i   cθ_i·cα_i  -cθ_i·sα_i   a_i·sθ_i ]
-[ 0      sα_i        cα_i        d_i      ]
-[ 0      0            0            1        ]
-
-T_4^0 = T_1^0 · T_2^1 · T_3^2 · T_4^3
-```
+$$T_i^{i-1} = \begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix}, \qquad T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3$$
 
 L’espace de travail est l’ensemble des positions de l’outil sur les plages articulaires :
 
-```text
-W = { p(q) | q_i ∈ [q_i,min, q_i,max] }
-p(q) = [T_4^0(q)]_{1:3,4}
-```
+$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 La somme des bielles vaut 113.5 + 88.5 + 152 = 354 mm. Avec les décalages du modèle, l’espace de travail échantillonné atteint environ 450 mm.
 
@@ -177,23 +167,15 @@ La bielle longue XY v2 est évaluée comme un assemblage statique. La connexion 
 
 La solution éléments finis s’écrit :
 
-```text
-K·u = f
-```
+$$K u = f$$
 
 où K est la matrice de rigidité, u le vecteur des déplacements nodaux et f le vecteur des charges nodales. Le même chemin de charge peut être vérifié par les relations de poutre console :
 
-```text
-M = F·L
-σ = M·c / I
-δ = F·L³ / (3·E·I)
-```
+$$M = FL, \qquad \sigma = \frac{Mc}{I}, \qquad \delta = \frac{FL^3}{3EI}$$
 
 L’étude v2 donne une carte du déplacement (URES) dont le maximum vaut :
 
-```text
-u_max = 1.388 × 10⁻² mm
-```
+$$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="Carte de déplacement statique de la bielle longue XY v2" width="480"/>
@@ -205,9 +187,7 @@ u_max = 1.388 × 10⁻² mm
 
 Le panneau v2 utilise l’intégrale absolue de la vitesse articulaire comme indice de sélection :
 
-```text
-E_Sum = Σ_{i=1}^{F} | ∫_0^t (dθ_i/dt) dτ |
-```
+$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
 
 La sélection compare E_Sum à l’enveloppe de travail. Le flux est :
 

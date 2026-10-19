@@ -114,15 +114,11 @@
 
 设关节模块数为 <i>F</i>、长连杆数为 <i>N</i><sub>LL</sub>、短连杆数为 <i>N</i><sub>LS</sub>，FCF 连接方法总数为：
 
-```text
-N_com = Σ_{i=0}^{N_LL} Σ_{j=0}^{N_LS} 8^F · 18^{N_LL} · 12^{N_LS}
-```
+$$\displaystyle N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^{F} \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}$$
 
 三模块装配固定底座相邻方向，其余两个模块各有两种垂直通道：
 
-```text
-N₃ = 3! × 2² = 24
-```
+$$N_3 = 3! \cdot 2^{3-1} = 24$$
 
 24 种组合均已建成 SolidWorks 装配模型。
 
@@ -146,22 +142,16 @@ N₃ = 3! × 2² = 24
 
 标准 DH 变换为：
 
-```text
-T_i^{i-1} =
-[ cθ_i  -sθ_i·cα_i   sθ_i·sα_i   a_i·cθ_i ]
-[ sθ_i   cθ_i·cα_i  -cθ_i·sα_i   a_i·sθ_i ]
-[ 0      sα_i        cα_i        d_i      ]
-[ 0      0            0            1        ]
-
-T_4^0 = T_1^0 · T_2^1 · T_3^2 · T_4^3
-```
+$$T_i^{i-1} = \begin{bmatrix}
+c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
+s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
+0 & s\alpha_i & c\alpha_i & d_i \\
+0 & 0 & 0 & 1
+\end{bmatrix}, \qquad T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3$$
 
 工作空间为关节范围内的末端位置集合：
 
-```text
-W = { p(q) | q_i ∈ [q_i,min, q_i,max] }
-p(q) = [T_4^0(q)]_{1:3,4}
-```
+$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 三段连杆长度之和为 113.5 + 88.5 + 152 = 354 mm。计入模型偏置后，采样工作空间最大可达距离约为 450 mm。
 
@@ -177,23 +167,15 @@ v2 的 XY 长连杆按静力装配进行评估。底座连接固定，工作载�
 
 有限元方程为：
 
-```text
-K·u = f
-```
+$$K u = f$$
 
 其中 K 为刚度矩阵，u 为节点位移向量，f 为节点载荷向量。同一载荷路径可用悬臂梁关系校核：
 
-```text
-M = F·L
-σ = M·c / I
-δ = F·L³ / (3·E·I)
-```
+$$M = FL, \qquad \sigma = \frac{Mc}{I}, \qquad \delta = \frac{FL^3}{3EI}$$
 
 v2 分析给出位移幅值（URES）云图，最大值为：
 
-```text
-u_max = 1.388 × 10⁻² mm
-```
+$$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="v2 XY 长连杆静态位移云图" width="480"/>
@@ -205,9 +187,7 @@ u_max = 1.388 × 10⁻² mm
 
 v2 展板使用关节速度绝对积分作为装配选型指标：
 
-```text
-E_Sum = Σ_{i=1}^{F} | ∫_0^t (dθ_i/dt) dτ |
-```
+$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
 
 选型比较 E_Sum 与工作空间包络。流程如下：
 
