@@ -151,7 +151,7 @@ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
 
 The workspace is the set of tool positions over the joint ranges:
 
-$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
+$$\mathcal{W} = \{\, \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \,\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 The link-length sum is 113.5 + 88.5 + 152 = 354 mm. With the model offsets, the sampled workspace reaches about 450 mm.
 
@@ -187,7 +187,7 @@ $$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 The v2 board uses the absolute joint-velocity integral as the assembly-selection index:
 
-$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
+$$E_{Sum} = \sum_{i=1}^{F} \lvert \int_0^t \dot{\theta}_i(\tau)\,d\tau \rvert$$
 
 The selection compares E_Sum with the workspace envelope. The workflow is:
 

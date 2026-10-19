@@ -151,7 +151,7 @@ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
 
 L’espace de travail est l’ensemble des positions de l’outil sur les plages articulaires :
 
-$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
+$$\mathcal{W} = \{\, \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \,\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 La somme des bielles vaut 113.5 + 88.5 + 152 = 354 mm. Avec les décalages du modèle, l’espace de travail échantillonné atteint environ 450 mm.
 
@@ -187,7 +187,7 @@ $$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 Le panneau v2 utilise l’intégrale absolue de la vitesse articulaire comme indice de sélection :
 
-$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
+$$E_{Sum} = \sum_{i=1}^{F} \lvert \int_0^t \dot{\theta}_i(\tau)\,d\tau \rvert$$
 
 La sélection compare E_Sum à l’enveloppe de travail. Le flux est :
 

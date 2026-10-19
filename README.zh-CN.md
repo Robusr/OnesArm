@@ -151,7 +151,7 @@ s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
 
 工作空间为关节范围内的末端位置集合：
 
-$$\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
+$$\mathcal{W} = \{\, \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \,\}, \qquad \mathbf{p}(q) = [T_4^0(q)]_{1:3,4}$$
 
 三段连杆长度之和为 113.5 + 88.5 + 152 = 354 mm。计入模型偏置后，采样工作空间最大可达距离约为 450 mm。
 
@@ -187,7 +187,7 @@ $$u_{\max} = 1.388 \times 10^{-2}\ \text{mm}$$
 
 v2 展板使用关节速度绝对积分作为装配选型指标：
 
-$$E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|$$
+$$E_{Sum} = \sum_{i=1}^{F} \lvert \int_0^t \dot{\theta}_i(\tau)\,d\tau \rvert$$
 
 选型比较 E_Sum 与工作空间包络。流程如下：
 
