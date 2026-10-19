@@ -33,9 +33,7 @@
 
 The arm is assembled from interchangeable joint, link and end-effector modules through **T/N mortise-and-tenon** interfaces. For the three-module configuration, the base-adjacent orientation is fixed and the other two modules choose one of two perpendicular channels, giving
 
-$$
-N_3 = 3! \cdot 2^{3-1} = 24
-$$
+**N₃ = 3! × 2² = 24**
 
 joint layouts. The 24 assemblies are modelled in SolidWorks.
 
@@ -56,27 +54,12 @@ The earlier **v1 reference build**, with 15 kgf·cm PWM servos and a Raspberry P
 
 ### v2 current platform
 
-```text
-                    ┌──────────────────────────────┐
-                    │  End effector                │
-                    │  gripper / ultrasonic / gas  │
-                    └──────────────┬───────────────┘
-                                   │ T/N interface
-                    ┌──────────────┴───────────────┐
-                    │  Link module (XX / XY / short)│
-                    │  5 mm 5052 + carbon tube      │
-                    └──────────────┬───────────────┘
-                                   │
-                    ┌──────────────┴───────────────┐
-                    │  Joint module (45° / 90°)     │
-                    │  42BYGH47 + FLE-42-20 + CAN   │
-                    └──────────────┬───────────────┘
-                                   │
-                    ┌──────────────┴───────────────┐
-                    │  4040 platform + 350 W supply │
-                    │  STM32F407ZGT6 CAN controller │
-                    └──────────────────────────────┘
-```
+<p align="center">
+  <img src="./media/photos/project/architecture_v2.svg" alt="OnesArm v2 system architecture" width="760"/>
+  <br>
+  <em><strong>System architecture.</strong> End effector, link module, joint module and 4040 platform, with the CAN bus and 350 W supply.</em>
+</p>
+
 
 | Subsystem | v2 implementation |
 |---|---|
@@ -121,7 +104,27 @@ The earlier **v1 reference build**, with 15 kgf·cm PWM servos and a Raspberry P
 
 ### Modular combinations
 
-The report abstracts the chain as **Connecting Face – Connecting Channel – Connecting Face** (FCF). An X-X or X-Y long link has 6 faces × 4 channels; a short link has 4 × 4; a joint has 2 × 4. For the three-module configuration, the 45° module and two 90° modules can be ordered in $3!$ ways; the base-adjacent orientation is fixed, and the other two orientations give $2^2$. The result is 24, verified by 24 CAD assemblies plus 3 single-joint models.
+The modular interface is a **connecting face – connecting channel – connecting face** (FCF) chain. An X-X or X-Y long link has 6 faces × 4 channels, a short link has 4 × 4, and a joint has 2 × 4. The per-module connection counts are:
+
+- Base: 3 methods.
+- X-X / X-Y long link: 2 × 3 × 3 = 18 methods.
+- Short link: 2 × 2 × 3 = 12 methods.
+- Joint: Pro side 4 × 1 × 1 = 4, Con side 1 × 4 × 1 = 4, total 8 per joint module.
+- General end link: 2 × 2 or 2 × 3 methods.
+
+For <i>F</i> joint modules, <i>N</i><sub>LL</sub> long links and <i>N</i><sub>LS</sub> short links, the FCF connection-method total is:
+
+```text
+N_com = Σ_{i=0}^{N_LL} Σ_{j=0}^{N_LS} 8^F · 18^{N_LL} · 12^{N_LS}
+```
+
+The three-module assembly fixes the base-adjacent orientation and gives the remaining two modules two perpendicular channels each:
+
+```text
+N₃ = 3! × 2² = 24
+```
+
+The 24 combinations are modelled as SolidWorks assemblies.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="Connecting face - connecting channel - connecting face" width="520"/>
@@ -130,25 +133,37 @@ The report abstracts the chain as **Connecting Face – Connecting Channel – C
   <em><strong>Figure 4 — FCF abstraction.</strong> Every connection is a face, a channel and another face. Long links have six faces, short links four, and joints two.</em>
 </p>
 
-### Kinematics
+### Kinematics and workspace
 
 The analysed configuration is **AyCxBy-D**, a 4-DOF chain. Report Table 3-20 gives:
 
-| $i$ | $d_i$ (mm) | $a_i$ (mm) | $\alpha_i$ | Report range |
+| i | dᵢ (mm) | aᵢ (mm) | αᵢ | Report range |
 |---:|---:|---:|---:|---|
 | 1 | 95 | 0 | 90° | 0° |
 | 2 | 0 | 113.5 | 90° | 0–180° |
 | 3 | 21.34 | 88.5 | 90° | 0–180° |
 | 4 | 0 | 152 | 0° | 0–180° |
 
-The verification model uses standard DH:
+The standard DH transform is:
 
-$$
-T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
-\operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
-$$
+```text
+T_i^{i-1} =
+[ cθ_i  -sθ_i·cα_i   sθ_i·sα_i   a_i·cθ_i ]
+[ sθ_i   cθ_i·cα_i  -cθ_i·sα_i   a_i·sθ_i ]
+[ 0      sα_i        cα_i        d_i      ]
+[ 0      0            0            1        ]
 
-The link-length sum is $113.5 + 88.5 + 152 = 354$ mm. With the model offsets, the sampled workspace reaches about **450 mm**.
+T_4^0 = T_1^0 · T_2^1 · T_3^2 · T_4^3
+```
+
+The workspace is the set of tool positions over the joint ranges:
+
+```text
+W = { p(q) | q_i ∈ [q_i,min, q_i,max] }
+p(q) = [T_4^0(q)]_{1:3,4}
+```
+
+The link-length sum is 113.5 + 88.5 + 152 = 354 mm. With the model offsets, the sampled workspace reaches about 450 mm.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Workspace comparison for four assembly layouts" width="760"/>
@@ -156,29 +171,29 @@ The link-length sum is $113.5 + 88.5 + 152 = 354$ mm. With the model offsets, th
   <em><strong>Figure 5 — Workspace comparison.</strong> Four of the 24 layouts: AyCxBy-D, AyCyBx-D, AyCxBx-D and AyCyBy-D. Simulation samples from the kinematic model.</em>
 </p>
 
-Assembly selection compares workspace envelopes and a kinematic effort index over the 24 layouts. The workspace study covers the four representative layouts shown above.
-
 ### v2 finite element analysis
 
 The v2 XY long link is evaluated as a static assembly. The base connection is fixed and the service load is applied at the connection nodes. The model combines the 5 mm 5052 aluminium plates with the 50 × 46 mm carbon tube.
 
-The finite element solution is
+The finite element solution is:
 
-$$
-K u = f,
-$$
+```text
+K·u = f
+```
 
-where $K$ is the stiffness matrix, $u$ the nodal displacement vector and $f$ the nodal load vector. The same load path can be checked with the cantilever relations
+where K is the stiffness matrix, u the nodal displacement vector and f the nodal load vector. The same load path can be checked with the cantilever relations:
 
-$$
-M = F L, \qquad \sigma = \frac{M c}{I}, \qquad \delta = \frac{F L^3}{3 E I}.
-$$
+```text
+M = F·L
+σ = M·c / I
+δ = F·L³ / (3·E·I)
+```
 
-The v2 study reports a displacement-magnitude (URES) contour with a maximum of
+The v2 study reports a displacement-magnitude (URES) contour with a maximum of:
 
-$$
-u_{\max} = 1.388 \times 10^{-2}\ \text{mm}.
-$$
+```text
+u_max = 1.388 × 10⁻² mm
+```
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="v2 XY long link static displacement contour" width="480"/>
@@ -186,70 +201,20 @@ $$
   <em><strong>Figure 6 — v2 finite element analysis.</strong> Static displacement contour of the XY long link. The base is fixed and the connection nodes carry the service load; the URES legend is in millimetres.</em>
 </p>
 
-### v2 mathematical derivation
+### Assembly selection
 
-The board reduces each connection to a connecting face, a connecting channel and another connecting face (FCF). The per-module connection counts are:
+The v2 board uses the absolute joint-velocity integral as the assembly-selection index:
 
-- Base: 3 methods.
-- X-X and X-Y long link: $2 \times 3 \times 3 = 18$ methods.
-- Short link: $2 \times 2 \times 3 = 12$ methods.
-- Joint: Pro side $4 \times 1 \times 1 = 4$, Con side $1 \times 4 \times 1 = 4$, total 8 per joint module.
-- General end link: $2 \times 2$ or $2 \times 3$ methods.
+```text
+E_Sum = Σ_{i=1}^{F} | ∫_0^t (dθ_i/dt) dτ |
+```
 
-For $F$ joint modules, $N_{LL}$ long links and $N_{LS}$ short links, the FCF connection-method total is
-
-$$
-N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^F \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}.
-$$
+The selection compares E_Sum with the workspace envelope. The workflow is:
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-10_fcf_method_counts.png" alt="FCF connection counts per module" width="460"/>
-  <img src="./media/photos/reference/key_figures/fig5-10_fcf_formula.png" alt="FCF connection-method total formula" width="460"/>
-  <br>
-  <em><strong>Figure 7 — FCF connection-method count.</strong> Per-module counts and the total formula used on the v2 board.</em>
-</p>
-
-For the three-module assembly, the base-adjacent orientation is fixed and the remaining two modules choose one of two perpendicular channels:
-
-$$
-N_3 = 3! \cdot 2^{3-1} = 24.
-$$
-
-The forward kinematics uses the standard DH transform
-
-$$
-T_i^{i-1} =
-\begin{bmatrix}
-c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
-s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
-0 & s\alpha_i & c\alpha_i & d_i \\
-0 & 0 & 0 & 1
-\end{bmatrix},
-\qquad
-T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3.
-$$
-
-The workspace is the set of tool positions over the joint ranges:
-
-$$
-\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\},
-\qquad
-\mathbf{p}(q) = [T_4^0(q)]_{1:3,4}.
-$$
-
-The sampled envelope reaches about 450 mm. Assembly selection uses the board's kinematic effort index
-
-$$
-E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|,
-$$
-
-together with the workspace envelope. The workflow is shown below.
-
-<p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-11_effort_index.png" alt="Kinematic effort index formula" width="360"/>
   <img src="./media/photos/reference/key_figures/fig5-11_optimization_workflow.png" alt="Assembly selection workflow" width="520"/>
   <br>
-  <em><strong>Figure 8 — v2 assembly-selection workflow.</strong> The effort index and the workspace pre-processing path.</em>
+  <em><strong>Figure 7 — v2 assembly-selection workflow.</strong> The effort index and the workspace pre-processing path.</em>
 </p>
 
 ### v1 reference static analysis
@@ -260,7 +225,7 @@ The v1 static study uses 9400A photopolymer resin and a 10 N load on each joint 
   <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="Finite element mesh of the joint housing" width="380"/>
   <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="Static stress result for the joint housing" width="380"/>
   <br>
-  <em><strong>Figure 9 — v1 reference static analysis.</strong> Mesh and stress result for the joint housing under the 10 N load case.</em>
+  <em><strong>Figure 8 — v1 reference static analysis.</strong> Mesh and stress result for the joint housing under the 10 N load case.</em>
 </p>
 
 ## Repository structure
@@ -350,7 +315,7 @@ The v2 CAD and platform views show the current structure and drive package.
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="v2 arm on the 4040 working platform" width="820"/>
   <br>
-  <em><strong>Figure 10 — v2 working platform.</strong> Stepper-driven arm, aluminium/carbon links and the 4040 frame.</em>
+  <em><strong>Figure 9 — v2 working platform.</strong> Stepper-driven arm, aluminium/carbon links and the 4040 frame.</em>
 </p>
 
 The v1 reference build demonstrations show the servo/Pico reference build in motion, the expand-controller OLED/GNSS display, the gripper/pen module and the simulation view.
@@ -370,7 +335,7 @@ The v1 reference build demonstrations show the servo/Pico reference build in mot
   <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Module assembly view" width="420"/>
   <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 assembly combinations" width="420"/>
   <br>
-  <em><strong>Figure 11 — v1 reference build and assembly views.</strong> The servo/Pico build, a module stack and the 24 permutation/orientation combinations.</em>
+  <em><strong>Figure 10 — v1 reference build and assembly views.</strong> The servo/Pico build, a module stack and the 24 permutation/orientation combinations.</em>
 </p>
 
 ## Design specifications
@@ -380,15 +345,15 @@ The v1 reference build demonstrations show the servo/Pico reference build in mot
 | Parameter | Value | Source |
 |---|---|---|
 | Analysed configuration | AyCxBy-D, 4 DOF | Report §3.3 |
-| Link parameters $d_1, a_2, d_3, a_3, a_4$ | 95, 113.5, 21.34, 88.5, 152 mm | Report Table 3-20 |
+| Link parameters d₁, a₂, d₃, a₃, a₄ | 95, 113.5, 21.34, 88.5, 152 mm | Report Table 3-20 |
 | Link-length sum | 354 mm | Computed |
 | Maximum model reach | about 450 mm | Computed, 10,000 samples |
-| Assemblies | 24 combinations | $3!\,2^{2}$; 24 CAD files |
+| Assemblies | 24 combinations | 3! × 2²; 24 CAD files |
 | Drive | 42BYGH47 + FLE-42-20, 1:20 | Report §5.2.2 |
 | Controller | STM32F103C8T6 CAN + STM32F407ZGT6 | Report §5.2.2 / §5.2.3 |
 | Platform | 4040 aluminium profile, 350 W supply | Report §5.2.3 |
 | Structure | 5 mm 5052 aluminium sheet + 50 × 46 mm carbon tube | Report §5.2.1 |
-| FEA material | 9400A resin, $E=2.75$ GPa, $\nu=0.44$, 1150 kg/m³ | Report Table 3-1 |
+| FEA material | 9400A resin, E = 2.75 GPa, ν = 0.44, 1150 kg/m³ | Report Table 3-1 |
 | FEA load | 10 N at each joint top face | Report §3.1.2 |
 
 ### v1 reference build

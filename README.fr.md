@@ -33,9 +33,7 @@
 
 Le bras s’assemble à partir de modules d’articulation, de bielle et d’effecteur interchangeables via des interfaces **T/N à tenon et mortaise**. Pour la configuration à trois modules, l’orientation adjacente à la base est fixe et les deux autres modules choisissent l’un de deux canaux perpendiculaires, ce qui donne
 
-$$
-N_3 = 3! \cdot 2^{3-1} = 24
-$$
+**N₃ = 3! × 2² = 24**
 
 configurations articulaires. Les 24 assemblages sont modélisés dans SolidWorks.
 
@@ -56,27 +54,12 @@ La **configuration de référence v1**, avec servomoteurs PWM de 15 kgf·cm et R
 
 ### Plateforme v2 actuelle
 
-```text
-                    ┌──────────────────────────────┐
-                    │  Effecteur terminal           │
-                    │  pince / ultrasons / gaz      │
-                    └──────────────┬───────────────┘
-                                   │ interface T/N
-                    ┌──────────────┴───────────────┐
-                    │  Module de bielle (XX/XY/court)│
-                    │  tôle 5052 5 mm + tube carbone │
-                    └──────────────┬───────────────┘
-                                   │
-                    ┌──────────────┴───────────────┐
-                    │  Module d’articulation (45°/90°)│
-                    │  42BYGH47 + FLE-42-20 + CAN   │
-                    └──────────────┬───────────────┘
-                                   │
-                    ┌──────────────┴───────────────┐
-                    │  Plateforme 4040 + 350 W      │
-                    │  Contrôleur CAN STM32F407ZGT6 │
-                    └──────────────────────────────┘
-```
+<p align="center">
+  <img src="./media/photos/project/architecture_v2.svg" alt="Architecture système OnesArm v2" width="760"/>
+  <br>
+  <em><strong>Architecture système.</strong> Effecteur, module de bielle, module d’articulation et plateforme 4040, avec le bus CAN et l’alimentation 350 W.</em>
+</p>
+
 
 | Sous-système | Implémentation v2 |
 |---|---|
@@ -121,7 +104,27 @@ La **configuration de référence v1**, avec servomoteurs PWM de 15 kgf·cm et R
 
 ### Combinaisons modulaires
 
-Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion – Face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux ; une bielle courte 4 × 4 ; une articulation 2 × 4. Pour la configuration à trois modules, le module 45° et les deux modules 90° peuvent être ordonnés de $3!$ façons ; l’orientation adjacente à la base est fixe et les deux autres donnent $2^2$. Le résultat est 24, vérifié par 24 assemblages CAO et 3 modèles d’articulation seule.
+L’interface modulaire est une chaîne **face de connexion – canal de connexion – face de connexion** (FCF). Une bielle longue X-X ou X-Y a 6 faces × 4 canaux, une bielle courte 4 × 4 et une articulation 2 × 4. Les nombres de méthodes par module sont :
+
+- Base : 3 méthodes.
+- Bielles longues X-X / X-Y : 2 × 3 × 3 = 18 méthodes.
+- Bielle courte : 2 × 2 × 3 = 12 méthodes.
+- Articulation : côté Pro 4 × 1 × 1 = 4, côté Con 1 × 4 × 1 = 4, soit 8 par module d’articulation.
+- Bielle terminale générale : 2 × 2 ou 2 × 3 méthodes.
+
+Pour <i>F</i> modules d’articulation, <i>N</i><sub>LL</sub> bielles longues et <i>N</i><sub>LS</sub> bielles courtes, le total FCF vaut :
+
+```text
+N_com = Σ_{i=0}^{N_LL} Σ_{j=0}^{N_LS} 8^F · 18^{N_LL} · 12^{N_LS}
+```
+
+L’assemblage à trois modules fixe l’orientation adjacente à la base et donne aux deux autres modules deux canaux perpendiculaires chacun :
+
+```text
+N₃ = 3! × 2² = 24
+```
+
+Les 24 combinaisons sont modélisées dans SolidWorks.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-7_fcf_structure.png" alt="Face de connexion - canal de connexion - face de connexion" width="520"/>
@@ -130,25 +133,37 @@ Le rapport abstrait la chaîne en **Face de connexion – Canal de connexion –
   <em><strong>Figure 4 — Abstraction FCF.</strong> Chaque connexion est une face, un canal et une autre face. Les bielles longues ont six faces, les bielles courtes quatre, les articulations deux.</em>
 </p>
 
-### Cinématique
+### Cinématique et espace de travail
 
 La configuration analysée est **AyCxBy-D**, une chaîne à 4 DDL. La table 3-20 du rapport donne :
 
-| $i$ | $d_i$ (mm) | $a_i$ (mm) | $\alpha_i$ | Plage du rapport |
+| i | dᵢ (mm) | aᵢ (mm) | αᵢ | Plage du rapport |
 |---:|---:|---:|---:|---|
 | 1 | 95 | 0 | 90° | 0° |
 | 2 | 0 | 113.5 | 90° | 0–180° |
 | 3 | 21.34 | 88.5 | 90° | 0–180° |
 | 4 | 0 | 152 | 0° | 0–180° |
 
-Le modèle de vérification utilise la DH standard :
+La transformation DH standard est :
 
-$$
-T_i = \operatorname{Rot}_z(\theta_i)\,\operatorname{Trans}_z(d_i)\,
-\operatorname{Trans}_x(a_i)\,\operatorname{Rot}_x(\alpha_i).
-$$
+```text
+T_i^{i-1} =
+[ cθ_i  -sθ_i·cα_i   sθ_i·sα_i   a_i·cθ_i ]
+[ sθ_i   cθ_i·cα_i  -cθ_i·sα_i   a_i·sθ_i ]
+[ 0      sα_i        cα_i        d_i      ]
+[ 0      0            0            1        ]
 
-La somme des bielles vaut $113.5 + 88.5 + 152 = 354$ mm. Avec les décalages du modèle, l’espace de travail échantillonné atteint environ **450 mm**.
+T_4^0 = T_1^0 · T_2^1 · T_3^2 · T_4^3
+```
+
+L’espace de travail est l’ensemble des positions de l’outil sur les plages articulaires :
+
+```text
+W = { p(q) | q_i ∈ [q_i,min, q_i,max] }
+p(q) = [T_4^0(q)]_{1:3,4}
+```
+
+La somme des bielles vaut 113.5 + 88.5 + 152 = 354 mm. Avec les décalages du modèle, l’espace de travail échantillonné atteint environ 450 mm.
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig3-29_workspaces.png" alt="Comparaison des espaces de travail de quatre assemblages" width="760"/>
@@ -156,29 +171,29 @@ La somme des bielles vaut $113.5 + 88.5 + 152 = 354$ mm. Avec les décalages du 
   <em><strong>Figure 5 — Comparaison des espaces de travail.</strong> Quatre des 24 configurations : AyCxBy-D, AyCyBx-D, AyCxBx-D et AyCyBy-D. Échantillons de simulation du modèle cinématique.</em>
 </p>
 
-La sélection d’assemblage compare les enveloppes de travail et un indicateur d’effort cinématique sur les 24 configurations. L’étude d’espace de travail couvre les quatre configurations représentatives ci-dessus.
-
 ### Analyse par éléments finis v2
 
 La bielle longue XY v2 est évaluée comme un assemblage statique. La connexion de base est encastrée et la charge de service est appliquée aux nœuds de connexion. Le modèle associe les tôles aluminium 5052 de 5 mm au tube carbone de 50 × 46 mm.
 
-La solution éléments finis s’écrit
+La solution éléments finis s’écrit :
 
-$$
-K u = f,
-$$
+```text
+K·u = f
+```
 
-où $K$ est la matrice de rigidité, $u$ le vecteur des déplacements nodaux et $f$ le vecteur des charges nodales. Le même chemin de charge peut être vérifié par les relations de poutre console :
+où K est la matrice de rigidité, u le vecteur des déplacements nodaux et f le vecteur des charges nodales. Le même chemin de charge peut être vérifié par les relations de poutre console :
 
-$$
-M = F L, \qquad \sigma = \frac{M c}{I}, \qquad \delta = \frac{F L^3}{3 E I}.
-$$
+```text
+M = F·L
+σ = M·c / I
+δ = F·L³ / (3·E·I)
+```
 
-L’étude v2 donne une carte du déplacement (URES) dont le maximum vaut
+L’étude v2 donne une carte du déplacement (URES) dont le maximum vaut :
 
-$$
-u_{\max} = 1.388 \times 10^{-2}\ \text{mm}.
-$$
+```text
+u_max = 1.388 × 10⁻² mm
+```
 
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-3_v2_fea_displacement.png" alt="Carte de déplacement statique de la bielle longue XY v2" width="480"/>
@@ -186,70 +201,20 @@ $$
   <em><strong>Figure 6 — Analyse par éléments finis v2.</strong> Carte de déplacement statique de la bielle longue XY. La base est encastrée et les nœuds de connexion portent la charge de service ; la légende URES est en millimètres.</em>
 </p>
 
-### Dérivation mathématique v2
+### Sélection d’assemblage
 
-Le panneau réduit chaque connexion à une face, un canal et une autre face (FCF). Les nombres de méthodes par module sont :
+Le panneau v2 utilise l’intégrale absolue de la vitesse articulaire comme indice de sélection :
 
-- Base : 3 méthodes.
-- Bielles longues X-X et X-Y : $2 \times 3 \times 3 = 18$ méthodes.
-- Bielle courte : $2 \times 2 \times 3 = 12$ méthodes.
-- Articulation : côté Pro $4 \times 1 \times 1 = 4$, côté Con $1 \times 4 \times 1 = 4$, soit 8 par module d’articulation.
-- Bielle terminale générale : $2 \times 2$ ou $2 \times 3$ méthodes.
+```text
+E_Sum = Σ_{i=1}^{F} | ∫_0^t (dθ_i/dt) dτ |
+```
 
-Pour $F$ modules d’articulation, $N_{LL}$ bielles longues et $N_{LS}$ bielles courtes, le total FCF vaut
-
-$$
-N_{com} = \sum_{i=0}^{N_{LL}} \sum_{j=0}^{N_{LS}} 8^F \cdot 18^{N_{LL}} \cdot 12^{N_{LS}}.
-$$
+La sélection compare E_Sum à l’enveloppe de travail. Le flux est :
 
 <p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-10_fcf_method_counts.png" alt="Nombres de méthodes FCF par module" width="460"/>
-  <img src="./media/photos/reference/key_figures/fig5-10_fcf_formula.png" alt="Formule du total des méthodes FCF" width="460"/>
-  <br>
-  <em><strong>Figure 7 — Total des méthodes de connexion FCF.</strong> Nombres par module et formule totale utilisée sur le panneau v2.</em>
-</p>
-
-Pour l’assemblage à trois modules, l’orientation adjacente à la base est fixe et les deux autres modules choisissent l’un de deux canaux perpendiculaires :
-
-$$
-N_3 = 3! \cdot 2^{3-1} = 24.
-$$
-
-La cinématique directe utilise la transformation DH standard :
-
-$$
-T_i^{i-1} =
-\begin{bmatrix}
-c\theta_i & -s\theta_i c\alpha_i & s\theta_i s\alpha_i & a_i c\theta_i \\
-s\theta_i & c\theta_i c\alpha_i & -c\theta_i s\alpha_i & a_i s\theta_i \\
-0 & s\alpha_i & c\alpha_i & d_i \\
-0 & 0 & 0 & 1
-\end{bmatrix},
-\qquad
-T_4^0 = T_1^0 T_2^1 T_3^2 T_4^3.
-$$
-
-L’espace de travail est l’ensemble des positions de l’outil sur les plages articulaires :
-
-$$
-\mathcal{W} = \left\{ \mathbf{p}(q) \mid q_i \in [q_{i,\min}, q_{i,\max}] \right\},
-\qquad
-\mathbf{p}(q) = [T_4^0(q)]_{1:3,4}.
-$$
-
-L’enveloppe échantillonnée atteint environ 450 mm. La sélection d’assemblage utilise l’indice d’effort cinématique du panneau
-
-$$
-E_{Sum} = \sum_{i=1}^{F} \left| \int_0^t \dot{\theta}_i(\tau)\,d\tau \right|,
-$$
-
-avec l’enveloppe de travail. Le flux est illustré ci-dessous.
-
-<p align="center">
-  <img src="./media/photos/reference/key_figures/fig5-11_effort_index.png" alt="Formule de l’indice d’effort cinématique" width="360"/>
   <img src="./media/photos/reference/key_figures/fig5-11_optimization_workflow.png" alt="Flux de sélection d’assemblage" width="520"/>
   <br>
-  <em><strong>Figure 8 — Flux de sélection d’assemblage v2.</strong> Indice d’effort et prétraitement de l’espace de travail.</em>
+  <em><strong>Figure 7 — Flux de sélection d’assemblage v2.</strong> Indice d’effort et prétraitement de l’espace de travail.</em>
 </p>
 
 ### Analyse statique de la configuration de référence v1
@@ -260,7 +225,7 @@ L’analyse statique v1 utilise la résine photopolymère 9400A et une charge de
   <img src="./media/photos/reference/key_figures/fig3-2_fea_mesh.png" alt="Maillage éléments finis du boîtier d’articulation" width="380"/>
   <img src="./media/photos/reference/key_figures/fig3-5_fea_stress.png" alt="Résultat de contrainte statique du boîtier d’articulation" width="380"/>
   <br>
-  <em><strong>Figure 9 — Analyse statique de la référence v1.</strong> Maillage et contrainte du boîtier d’articulation sous une charge de 10 N.</em>
+  <em><strong>Figure 8 — Analyse statique de la référence v1.</strong> Maillage et contrainte du boîtier d’articulation sous une charge de 10 N.</em>
 </p>
 
 ## Structure du dépôt
@@ -350,7 +315,7 @@ Les vues CAO et plateforme v2 présentent la structure et l’ensemble d’entra
 <p align="center">
   <img src="./media/photos/reference/key_figures/fig5-5_working_platform.jpg" alt="Bras v2 sur la plateforme de travail 4040" width="820"/>
   <br>
-  <em><strong>Figure 10 — Plateforme de travail v2.</strong> Bras à moteurs pas à pas, bielles aluminium/carbone et cadre 4040.</em>
+  <em><strong>Figure 9 — Plateforme de travail v2.</strong> Bras à moteurs pas à pas, bielles aluminium/carbone et cadre 4040.</em>
 </p>
 
 Les démonstrations de la configuration de référence v1 montrent le bras servo/Pico en mouvement, l’écran OLED/GNSS du contrôleur d’extension, la pince/le module stylo et la vue de simulation.
@@ -370,7 +335,7 @@ Les démonstrations de la configuration de référence v1 montrent le bras servo
   <img src="./media/photos/project/scene_module_assembly_small.jpg" alt="Vue d’assemblage des modules" width="420"/>
   <img src="./media/photos/project/modular_assembly_diagram_small.jpg" alt="24 combinaisons d’assemblage" width="420"/>
   <br>
-  <em><strong>Figure 11 — Configuration de référence v1 et vues d’assemblage.</strong> Configuration servo/Pico, empilement de modules et les 24 combinaisons permutation/orientation.</em>
+  <em><strong>Figure 10 — Configuration de référence v1 et vues d’assemblage.</strong> Configuration servo/Pico, empilement de modules et les 24 combinaisons permutation/orientation.</em>
 </p>
 
 ## Spécifications
@@ -380,15 +345,15 @@ Les démonstrations de la configuration de référence v1 montrent le bras servo
 | Paramètre | Valeur | Source |
 |---|---|---|
 | Configuration analysée | AyCxBy-D, 4 DDL | Rapport §3.3 |
-| Longueurs $d_1, a_2, d_3, a_3, a_4$ | 95 ; 113,5 ; 21,34 ; 88,5 ; 152 mm | Rapport table 3-20 |
+| Longueurs d₁, a₂, d₃, a₃, a₄ | 95 ; 113,5 ; 21,34 ; 88,5 ; 152 mm | Rapport table 3-20 |
 | Somme des bielles | 354 mm | Calcul |
 | Portée maximale du modèle | environ 450 mm | Calcul, 10 000 échantillons |
-| Assemblages | 24 combinaisons | $3!\,2^{2}$ ; 24 fichiers CAO |
+| Assemblages | 24 combinaisons | 3! × 2² ; 24 fichiers CAO |
 | Entraînement | 42BYGH47 + FLE-42-20, 1:20 | Rapport §5.2.2 |
 | Contrôleur | STM32F103C8T6 CAN + STM32F407ZGT6 | Rapport §5.2.2 / §5.2.3 |
 | Plateforme | Profilé aluminium 4040, alimentation 350 W | Rapport §5.2.3 |
 | Structure | Tôle aluminium 5052 de 5 mm + tube carbone 50 × 46 mm | Rapport §5.2.1 |
-| Matériau EF | Résine 9400A, $E=2.75$ GPa, $\nu=0.44$, 1150 kg/m³ | Rapport table 3-1 |
+| Matériau EF | Résine 9400A, E = 2.75 GPa, ν = 0.44, 1150 kg/m³ | Rapport table 3-1 |
 | Charge EF | 10 N sur chaque face supérieure d’articulation | Rapport §3.1.2 |
 
 ### Configuration de référence v1
