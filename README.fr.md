@@ -2,7 +2,7 @@
   <img src="./media/photos/project/banner.jpg" alt="Bras robotique modulaire OnesArm v2 sur une plateforme aluminium 4040" width="900"/>
 </p>
 
-<h1 align="center">OnesArm (珠联“臂”合)</h1>
+<h1 align="center">OnesArm</h1>
 
 <p align="center">
   <strong>Bras robotique série modulaire pour des tâches multi-scénarios</strong>
