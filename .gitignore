@@ -1,0 +1,64 @@
+# OnesArm — local and generated files
+
+# Large local media: kept in the working tree but not committed.
+media/videos/*.mp4
+media/source/**/*.psd
+media/photos/**/*.psd
+
+# SolidWorks caches and backups
+~$*.SLD*
+*.lck
+*.CWR
+*.BD2
+*.BDF
+*.MFC
+*.SL4
+*.BMC
+*.swj
+*.sldback
+*.log.1
+*.log.2
+Thumbs.db
+
+# STM32CubeIDE / Eclipse
+Debug/
+Release/
+.metadata/
+.settings/
+*.launch
+*.pdom
+*.o
+*.d
+*.cyclo
+*.su
+*.elf
+*.hex
+*.map
+*.list
+*.bak
+
+# Keil MDK
+*.crf
+*.axf
+*.dep
+*.lnp
+*.uvguix.*
+*.scvd
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors and OS
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+._*
+*.swp
+*.swo
+*~
+TODO.local
+scratch/

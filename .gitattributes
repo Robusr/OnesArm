@@ -1,0 +1,84 @@
+* text=auto
+
+# Text
+*.md text eol=lf
+*.py text eol=lf
+*.m text eol=lf
+*.c text eol=lf
+*.h text eol=lf
+*.s text eol=lf
+*.ld text eol=lf
+*.ioc text eol=lf
+*.csv text eol=lf
+*.tsv text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.txt text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
+
+# Windows-only scripts keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# SolidWorks CAD
+*.SLDPRT binary
+*.SLDASM binary
+*.SLDDRW binary
+*.SLDLFP binary
+*.sldprt binary
+*.sldasm binary
+
+# Exchange and fabrication
+*.STEP binary
+*.step binary
+*.STP binary
+*.stp binary
+*.STL binary
+*.stl binary
+*.GTL binary
+*.GTO binary
+*.GTS binary
+*.GTP binary
+*.GBL binary
+*.GBO binary
+*.GBS binary
+*.GBP binary
+*.GKO binary
+*.GDL binary
+*.DRL binary
+*.zip binary
+*.rar binary
+*.7z binary
+
+# Media and documents
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.psd binary
+*.pdf binary
+*.docx binary
+*.pptx binary
+*.xlsx binary
+*.mp4 binary
+*.mov binary
+*.avi binary
+
+# No meaningful diff
+*.sld* -diff -merge
+*.STEP -diff -merge
+*.STL -diff -merge
+*.zip -diff -merge
+*.pdf -diff -merge
+*.docx -diff -merge
+*.pptx -diff -merge
+*.png -diff -merge
+*.jpg -diff -merge
+*.jpeg -diff -merge
+*.gif -diff -merge
+
+# SVG diagrams are text and keep LF
+*.svg text eol=lf
